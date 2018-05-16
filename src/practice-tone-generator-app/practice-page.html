@@ -87,6 +87,9 @@
       <paper-toggle-button checked="{{runGenerator}}">On/Off</paper-toggle-button>
 
     </header>
+          <ptg-image id="current-tone" hidden$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
+          <ptg-image id="next-tone" hidden$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
+          <ptg-image id="next-text" hidden$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
 
     <main class="flex row wrap justify-center">
       <img src="../../images/a.svg" alt="">
@@ -119,10 +122,12 @@
       static get properties() {
         return {
           tone: {
-            type: String
+            type: String,
+            value: ''
           },
           nextTone: {
-            type: String
+            type: String,
+            value: ''
           },          
           beats: {
             type: Array,
@@ -163,6 +168,11 @@
         };
       }
 
+      _computeImgPath(toneWithOctave) {
+        // Cut off octave Number and replace # with sharp (since Filepaths don't like #)
+        var tone = toneWithOctave.substring(0, toneWithOctave.length -1).replace("#", "sharp");
+        return "../../images/" + tone + ".svg";
+      }
     }
 
     window.customElements.define(PracticePage.is, PracticePage);
