@@ -1,0 +1,101 @@
+<link rel="import" href="ptg-element.html">
+<script type="text/javascript" src="../../node_modules/tone/build/Tone.js"></script>
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="ptg-icons.html">
+<link rel="import" href="practice-page.html">
+<link rel="import" href="settings-page.html">
+
+<dom-module id="practice-tone-generator-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-text-size-adjust: none;
+
+        --text-base: {
+          text-rendering: optimizeLegibility;
+          font-kerning: normal;
+          -webkit-font-smoothing: antialiased;
+        };
+        background-color: rgb(245,245,245);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      iron-pages {
+        height: 100%;
+      }
+      practice-page, settings-page {
+        overflow: auto;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      } 
+      paper-icon-button {
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+      }
+    </style>
+
+    <iron-pages selected="[[selectedPage]]"
+    >
+      <practice-page
+        beat="{{beat}}"
+        note="{{note}}"
+        run-generator="{{runGenerator}}"
+        bpm="{{bpm}}"
+        tone="[[tone]]"
+        next-tone="[[nextTone]]"
+      ></practice-page>
+
+      <settings-page 
+        key-type="{{keyType}}" 
+        metronome-volume="{{metronomeVolume}}" 
+        synth-volume="{{synthVolume}}"
+        bars-before-switch="{{barsBeforeSwitch}}"
+      ></settings-page>
+    </iron-pages>
+
+    <paper-icon-button 
+      icon="ptg-icons:settings" 
+      alt="settings" 
+      on-click="_switchPage"
+    ></paper-icon-button>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class PracticeToneGeneratorApp extends PtgElement {
+      static get is() { return 'practice-tone-generator-app'; }
+      static get properties() {
+        return {
+          selectedPage: {
+            type: Number,
+            value: 0
+          }
+        };
+      }
+
+      _switchPage() {
+        if(this.selectedPage == 0) return this.set('selectedPage', 1)
+        this.set('selectedPage', 0);
+      }
+
+    }
+
+    window.customElements.define(PracticeToneGeneratorApp.is, PracticeToneGeneratorApp);
+  </script>
+</dom-module>

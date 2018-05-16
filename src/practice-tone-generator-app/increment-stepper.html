@@ -1,0 +1,102 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/skeleton-carousel/skeleton-carousel.html">
+
+<dom-module id="increment-stepper">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+
+      .item-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+
+      }
+
+      i[disabled] {
+        border-color: grey;
+        cursor: auto;
+      }
+
+      skeleton-carousel {
+        height: 100px;
+        --skeleton-carousel-min-height: 120px;
+        cursor: grab;
+      }
+
+    </style>
+
+    <main>
+      <skeleton-carousel direction="vertical" selected="{{selectedIndex}}">
+        <template is="dom-repeat" items="[[values]]">
+          <div class="item-container">
+            <p>[[item]]</p>
+          </div>
+        </template>
+      </skeleton-carousel>
+    </main>
+  </template>
+
+  <script>
+    /**
+     * `increment-stepper` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class IncrementSteper extends Polymer.Element {
+      static get is() { return 'increment-stepper';}
+      static get properties() {
+        return {
+          title: {
+            type: String
+          },
+          values: {
+            type: Array
+          },
+          selectedIndex: {
+            type: Number,
+            notify: true
+          },
+          selectedValue: {
+            type: String,
+            notify: true,
+            computed: "_computeSelectedValue(values.splices, selectedIndex)"
+          }
+        };
+      }
+
+      increaseIndex() {
+        let arrayLength = this.values.length;
+        if(arrayLength == this.index +1) return;
+        this.set('index', this.index+1)
+      }
+
+      decreaseIndex() {
+        if(this.index === 0) return;
+        this.set('index', this.index-1)
+      }      
+
+      _computeSelectedValue(valuesSpliced, index) {
+        return this.values[index]
+      }
+
+      _valueIsZero(value) {
+        return value === 0;
+      }
+
+      _valueIsLengthArray(valuesSpliced, index) {
+        if(!this.values) return true;
+        let arrayLength = this.values.length;
+        if(arrayLength == index+1) return true;
+        return false;
+      }
+    }
+    window.customElements.define(IncrementSteper.is, IncrementSteper);
+  </script>
+</dom-module>

@@ -1,0 +1,321 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="ptg-element">
+  <script>
+    /**
+     * `ptg-element` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class PtgElement extends Polymer.Element {
+      static get is() {return 'ptg-element';}
+      static get properties() {
+        return {
+          bpm:{
+            type: Number,
+            value: 60,
+            observer: "_handleBpmChanged"
+          },
+          runGenerator: {
+            type: Boolean,
+            value: false,
+            observer: "_switchRunGenerator"
+          },
+          tone: {
+            type: String
+          },
+          nextTone: {
+            type: String
+          },
+          keyType: {
+            type: String,
+            value: "all"
+          },
+          beat: {
+            type: String,
+            observer: "_handleBeatChange"
+          },
+          note: {
+            type: String,
+            observer: "_handleNoteChange"
+          },
+          tones: {
+            type: Array,
+            computed: "_computePossibleTones(keyType, whiteKeyTones.splices, flatTones.splices, sharpTones.splices)"
+          },
+          whiteKeyTones: {
+            type: Array,
+            value: function () {
+              return ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+            }    
+          },
+          // ♭
+          flatTones: {
+            type: Array,
+            value: function () {
+              return ['Db', 'Eb', 'Gb', 'Ab', 'Bb']
+            }
+          },
+          sharpTones: {
+            type: Array,
+            value: function () {
+              return ['C#', 'D#', 'F#', 'G#', 'A#']
+            }
+          }, 
+          barsBeforeSwitch: {
+            type: String,
+            observer: "_handleBarsBeforeSwitchChanged"
+          },
+          synthVolume: {
+            type: Number,
+            observer: "_setSynthVolume"
+          },
+          metronomeVolume: {
+            type: Number,
+            observer: "_setMetronomeVolume"
+          },
+          octave: {
+            type: Number,
+            value: 4
+          },          
+          _synthStarted: {
+            type: Boolean,
+            value: false
+          },
+          _player: {
+            type: Object,
+            value: {}
+          },
+          _clickPlayer: {
+            type: Object,
+            value: {}
+          },
+          _synth: {
+            type: Object
+          },
+          _transportReady: {
+            type: Boolean,
+            value: false,
+            observer: "_handleTransportReadyChanged"
+          },
+          _loop: {
+            type: Object
+          },
+          _transportId: {
+            type: String
+          },
+          _metronome: {
+            type: Object,
+            value: {}
+          },
+          _metronomeClick: {
+            type: Object,
+            value: {}
+          },          
+        };
+      }
+
+      static get observers() {
+        return [
+          '_computeTranportReady(keyType, note, beat)',
+        ]
+      }    
+
+
+      _handleTransportReadyChanged(ready, oldReady) {
+        if(ready == false|| ready == true && oldReady == true) return;
+        return this._startTransport()
+      }
+
+      _startTransport() {
+        Tone.Transport.bpm.value = this.bpm;
+        this._clickPlayer = new Tone.Player("./sounds/woodblock.mp3").toMaster();
+        this._player = new Tone.Player("./sounds/click.wav").toMaster();
+        
+        this._synth =  new Tone.Synth().toMaster()
+
+        let nextToneIndex = Math.floor(Math.random() * Math.floor(this.tones.length -1));
+        let nextTone = this.tones[nextToneIndex] + this.octave;
+        this.set('nextTone', nextTone)
+      }
+
+     _computeTranportReady(keyType, note, beat) {
+        if(!keyType || !note || !beat || this._transportStarted == true) return;
+        this.set('_transportReady', true)
+     }
+
+      playSynthFunction(time) {
+        var synth = this._synth;
+        var synth = this._synth;
+        var tone = this.nextTone;
+
+        synth.triggerAttackRelease(tone, this.barsBeforeSwitch + ":0:0", time);
+
+        Tone.Draw.schedule((function(time){
+          let nextToneIndex = Math.floor(Math.random() * Math.floor(this.tones.length -1));
+          let nextTone = this.tones[nextToneIndex] + this.octave;
+          this.set('tone', tone)
+          this.set('nextTone', nextTone)
+          
+          //this callback is invoked from a requestAnimationFrame
+          //and will be invoked close to AudioContext time
+
+        }.bind(this)), time) //use AudioContext time of the event
+      }
+
+      playMetronomeFunction(time) {
+        var player = this._player;
+        player.start(time)
+      }
+
+      playMetronomeFirstNoteFunction(time) {
+        var player = this._clickPlayer;
+        player.start(time)
+      }
+
+      _handleBarsBeforeSwitchChanged(barsBeforeSwitch, oldBarsBeforeSwitch) {
+        if(barsBeforeSwitch == oldBarsBeforeSwitch || typeof oldBarsBeforeSwitch == 'undefined') return;
+        this._stop()
+        if(!this.runGenerator) return;
+        this._start()
+      }
+
+      _handleBeatChange(beat, oldBeat) {
+        if(beat == oldBeat || typeof oldBeat == 'undefined') return;
+        this._stop();
+
+        if(!this.runGenerator) return;
+        window.setTimeout((function() {
+          this._start()
+        }.bind(this)), 300)
+      }
+
+      _handleNoteChange(note, oldNote) {
+        if(note == oldNote || typeof oldNote == 'undefined') return;
+        this._stop()
+        this._setTimeSignature(note);
+
+        if(!this.runGenerator) return;
+        window.setTimeout((function() {
+          this._start()        
+        }.bind(this)), 300)
+      }
+
+      _setTimeSignature(note) {
+        // Tone.Transport.timeSignature = note;
+      }
+
+      _setSynthVolume(volume) {
+        if(volume && this._synth) {
+          this._synth.volume.value = - volume;
+          if(volume == "30") return this._synth.volume.value = -10000;
+        }
+      }
+
+      _setMetronomeVolume(volume) {
+        if(volume && Object.keys(this._player).length > 0 && Object.keys(this._clickPlayer).length > 0) {
+          this._player.volume.value = - volume;
+          this._clickPlayer.volume.value = - volume;
+          if (volume == "30") {
+            this._player.mute=true;
+            return this._clickPlayer.mute=true;
+          }
+          this._synth.mute = false;
+        }
+      }
+
+      _switchRunGenerator(runGenerator) {
+        console.log(runGenerator)
+        if(runGenerator) return this._start();
+        return this._stop()
+      }
+      
+
+      _start() {
+        if(Tone.Transport.state == "started") return;
+        
+        this._setTimeSignature(this.note);
+
+        // var _synth = new Tone.Synth().toMaster();
+        // this.set('_synth', _synth);
+        console.log('_start', 'Tone.Transport.timeSignature:',Tone.Transport.timeSignature, 'this.beat', this.beat, (this.note/this.beat))
+        this._metronome = Tone.Transport.scheduleRepeat(this.playMetronomeFunction.bind(this), this._calculateTime(this.beat, this.note));
+        this._metronomeClick =  Tone.Transport.scheduleRepeat(this.playMetronomeFirstNoteFunction.bind(this), parseInt(this.note/4) + "n");       
+
+
+        this._transportId = Tone.Transport.scheduleRepeat(this.playSynthFunction.bind(this), this.barsBeforeSwitch + ":0:0");        
+        Tone.Transport.start();
+      }
+
+      _calculateTime(beat, note) {
+        switch (note) {
+          case 2:
+          case "2":
+            return parseInt(beat/2) + "n";
+            break;
+          case 4:
+          case "4":
+            return beat + "n";
+            break;            
+          case 8:
+          case "8":
+            return (beat*2) + "n";
+            break;            
+          case 16:
+          case "16":
+            return (beat*4) + "n";
+            break;                                 
+        }
+
+      }
+
+      _stop() {
+        Tone.Transport.cancel()
+        Tone.Transport.clear(this._metronome)
+        Tone.Transport.clear(this._metronomeClick)
+        
+        let synth = this._synth;
+        let _clickPlayer = this._clickPlayer;
+        let _player = this._player;
+        if(_clickPlayer.stop) _clickPlayer.stop();
+        if(_player.stop) _player.stop();
+        if(synth) synth.triggerRelease();
+
+        Tone.Transport.stop();
+		  }
+      
+      _handleBpmChanged(bpm) {
+        this._stop()
+        Tone.Transport.bpm.rampTo(bpm);
+
+        if(!this.runGenerator) return;
+        window.setTimeout((function() {
+          this._start()        
+        }.bind(this)), 300)
+      }
+
+      _computePossibleTones(keyType, whiteKeyTonesSplices, flatTonesSplices, sharpTonesSplices) {
+        var tones = [];
+        switch(keyType) {
+            case 'sharps':
+                tones = tones.concat(this.sharpTones);
+                break;
+            case 'whiteKeys':
+                tones = tones.concat(this.whiteKeyTones);
+                break;
+            case 'flats':
+                tones = tones.concat(this.flatTones);
+                break;                
+            default:
+                tones = tones.concat(this.flatTones,this.whiteKeyTones,this.sharpTones);
+        }
+        return tones;
+      }      
+    }
+
+    window.customElements.define(PtgElement.is, PtgElement);
+  </script>
+</dom-module>

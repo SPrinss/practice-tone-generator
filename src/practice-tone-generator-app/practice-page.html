@@ -1,0 +1,170 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="increment-stepper.html">
+
+<dom-module id="practice-page">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      header, main, footer {
+        margin: auto;
+        max-width: 600px;
+        width: 100%;
+      }
+      footer {
+        position: relative;
+      }
+      
+      header {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+      increment-stepper {
+        width: 60px;
+        height: 120px;
+      }
+      paper-slider {
+        width: 80%;
+        --paper-slider-input: {
+          width: 70px;
+        }
+      }
+      .bpm-container {
+        padding-bottom: 60px;
+      }
+      .bpm-container span { 
+        line-height: 56px;
+      }
+      .flex {
+        display: flex;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .row {
+        flex-direction: row;
+      }
+      .wrap {
+        flex-wrap: wrap;
+      }
+      paper-icon-button {
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+      }
+      #signatureDash {
+        text-align: center;
+        line-height: 120px;
+        font-size: 36px;
+        margin: 0;
+        color: grey;
+      }      
+
+      img {
+        width: 100px;
+      }
+    </style>
+
+    <header>
+      <increment-stepper 
+        values="[[beats]]"
+        selected-index="{{beatIndex}}"
+        selected-value="{{beat}}"
+      ></increment-stepper>
+
+      <p id="signatureDash">/</p>
+
+      <increment-stepper 
+        values="[[notes]]"
+        selected-index="{{noteIndex}}"
+        selected-value="{{note}}"
+      ></increment-stepper>
+
+      <paper-toggle-button checked="{{runGenerator}}">On/Off</paper-toggle-button>
+
+    </header>
+
+    <main class="flex row wrap justify-center">
+      <img src="../../images/a.svg" alt="">
+      <img src="../../images/b.svg" alt="">
+      
+      <p>[[tone]]</p>
+      <p>[[nextTone]]</p>    
+    </main>
+    <footer>
+      <div class="flex row wrap justify-center bpm-container">
+        <span>BPM</span>
+        <paper-slider pin min="30" max="200" editable value="{{bpm}}"></paper-slider>
+      </div>
+
+    </footer>
+
+  </template>
+
+  <script>
+    /**
+     * `practice-page` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class PracticePage extends Polymer.Element {
+      static get is() { return 'practice-page';}
+      static get properties() {
+        return {
+          tone: {
+            type: String
+          },
+          nextTone: {
+            type: String
+          },          
+          beats: {
+            type: Array,
+            value: function () {
+              return ['1', '2', '3', '4', '5','6', '7', '8', '9','10', '11', '12', '13']
+            }
+          },
+          beatIndex: {
+            type: Number,
+            value: 2
+          },
+          beat: {
+            type: String,
+            notify: true
+          },
+          notes: {
+            type: Array,
+            value: function () {
+              return ['2', '4', '8', '16']
+            }
+          },
+          noteIndex: {
+            type: Number,
+            value: 2
+          },
+          note: {
+            type: String,
+            notify: true
+          },   
+          runGenerator: {
+            type: Boolean,
+            notify: true
+          },
+          bpm: {
+            type: String,
+            notify: true
+          }       
+        };
+      }
+
+    }
+
+    window.customElements.define(PracticePage.is, PracticePage);
+  </script>
+</dom-module>

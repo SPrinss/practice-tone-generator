@@ -1,0 +1,109 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="increment-stepper.html">
+
+<dom-module id="settings-page">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      input {
+        -moz-transform: scaleX(-1);
+        -o-transform: scaleX(-1);
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        filter: FlipH;
+        -ms-filter: "FlipH";
+      }
+      header, main, footer {
+        margin: auto;
+        max-width: 600px;
+        width: 100%;
+      }     
+      paper-radio-button {
+        display: block;
+      } 
+    </style>
+
+    <main>
+      <paper-radio-group selected="{{keyType}}" aria-labelledby="label2">
+        <paper-radio-button name="all">All</paper-radio-button>
+        <paper-radio-button name="sharps">Sharps only</paper-radio-button>
+        <paper-radio-button name="flats">Flats only</paper-radio-button>
+        <paper-radio-button name="whiteKeys">White keys only</paper-radio-button>
+      </paper-radio-group>
+
+      <increment-stepper 
+        title="Bars to practice tone"
+        values="[[barsBeforeSwitchOptions]]"
+        selected-index="{{barsBeforeSwitchIndex}}"
+        selected-value="{{barsBeforeSwitch}}"
+      ></increment-stepper>
+
+      <div>
+        <span>Metronome volume</span>
+        <input type="range" min="1" max="30" value="{{metronomeVolume::change}}">
+      </div>
+      <div>
+        <span>Synth volume</span>
+        <input type="range" min="1" max="30" value="{{synthVolume::change}}">
+      </div>
+
+    </main>
+  </template>
+  <script>
+    /**
+     * `settings-page` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class SettingsPage extends Polymer.Element {
+      static get is() {
+        return 'settings-page';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          keyType: {
+            type: String,
+            notify: true
+          },
+          metronomeVolume: {
+            type: String,
+            value: "5",
+            notify: true
+          },
+          synthVolume: {
+            type: String,
+            value: "10",
+            notify: true
+          },
+          barsBeforeSwitchOptions: {
+            type: Array,
+            value: function () {
+              return ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+            }
+          },
+          barsBeforeSwitchIndex: {
+            type: Number,
+            value: 0
+          },   
+          barsBeforeSwitch: {
+            type: String,
+            notify: true
+          },          
+        };
+      }
+    }
+
+    window.customElements.define(SettingsPage.is, SettingsPage);
+  </script>
+</dom-module>
