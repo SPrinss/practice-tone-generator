@@ -13,12 +13,21 @@
         flex-direction: column;
         justify-content: center;
         text-align: center;
-
       }
 
       i[disabled] {
         border-color: grey;
         cursor: auto;
+      }
+
+      hr {
+        color: darkgrey;
+        width: 20%;
+      }
+
+      p {
+        margin: 12px;
+        color: #FFFFFF;
       }
 
       skeleton-carousel {
@@ -33,7 +42,9 @@
       <skeleton-carousel direction="vertical" selected="{{selectedIndex}}">
         <template is="dom-repeat" items="[[values]]">
           <div class="item-container">
+            <hr>
             <p>[[item]]</p>
+            <hr>
           </div>
         </template>
       </skeleton-carousel>
