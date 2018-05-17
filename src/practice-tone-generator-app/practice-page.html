@@ -225,9 +225,9 @@
         <p id="signatureDash">/</p>
 
         <increment-stepper 
-          values="[[notes]]"
-          selected-index="{{noteIndex}}"
-          selected-value="{{note}}"
+          values="[[measures]]"
+          selected-index="{{measureIndex}}"
+          selected-value="{{measure}}"
         ></increment-stepper>
 
         <paper-toggle-button checked="{{runGenerator}}">On/Off</paper-toggle-button>
@@ -290,17 +290,17 @@
             type: String,
             notify: true
           },
-          notes: {
+          measures: {
             type: Array,
             value: function () {
               return ['2', '4', '8', '16']
             }
           },
-          noteIndex: {
+          measureIndex: {
             type: Number,
             value: 2
           },
-          note: {
+          measure: {
             type: String,
             notify: true
           },   

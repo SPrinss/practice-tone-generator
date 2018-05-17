@@ -38,9 +38,9 @@
             type: String,
             observer: "_handleBeatChange"
           },
-          note: {
+          measure: {
             type: String,
-            observer: "_handleNoteChange"
+            observer: "_handleMeasureChange"
           },
           tones: {
             type: Array,
@@ -120,7 +120,7 @@
 
       static get observers() {
         return [
-          '_computeTranportReady(keyType, note, beat)',
+          '_computeTranportReady(keyType, measure, beat)',
         ]
       }    
 
@@ -144,8 +144,8 @@
         this.set('nextTone', nextTone)
       }
 
-     _computeTranportReady(keyType, note, beat) {
-        if(!keyType || !note || !beat || this._transportStarted == true) return;
+     _computeTranportReady(keyType, measure, beat) {
+        if(!keyType || !measure || !beat || this._transportStarted == true) return;
         this.set('_transportReady', true)
      }
 
@@ -173,7 +173,7 @@
         player.start(time)
       }
 
-      playMetronomeFirstNoteFunction(time) {
+      playMetronomeFirstMeasureFunction(time) {
         var player = this._clickPlayer;
         player.start(time)
       }
@@ -195,10 +195,10 @@
         }.bind(this)), 300)
       }
 
-      _handleNoteChange(note, oldNote) {
-        if(note == oldNote || typeof oldNote == 'undefined') return;
+      _handleMeasureChange(measure, oldMeasure) {
+        if(measure == oldMeasure || typeof oldMeasure == 'undefined') return;
         this._stop()
-        this._setTimeSignature(note);
+        this._setTimeSignature(measure);
 
         if(!this.runGenerator) return;
         window.setTimeout((function() {
@@ -206,8 +206,8 @@
         }.bind(this)), 300)
       }
 
-      _setTimeSignature(note) {
-        // Tone.Transport.timeSignature = note;
+      _setTimeSignature(measure) {
+        Tone.Transport.timeSignature = measure;
       }
 
       _setSynthVolume(volume) {
@@ -239,21 +239,21 @@
       _start() {
         if(Tone.Transport.state == "started") return;
         
-        this._setTimeSignature(this.note);
+        this._setTimeSignature(this.measure);
 
         // var _synth = new Tone.Synth().toMaster();
         // this.set('_synth', _synth);
-        console.log('_start', 'Tone.Transport.timeSignature:',Tone.Transport.timeSignature, 'this.beat', this.beat, (this.note/this.beat))
-        this._metronome = Tone.Transport.scheduleRepeat(this.playMetronomeFunction.bind(this), this._calculateTime(this.beat, this.note));
-        this._metronomeClick =  Tone.Transport.scheduleRepeat(this.playMetronomeFirstNoteFunction.bind(this), parseInt(this.note/4) + "n");       
+        console.log('_start', 'Tone.Transport.timeSignature:',Tone.Transport.timeSignature, 'this.beat', this.beat, (this.measure/this.beat))
+        this._metronome = Tone.Transport.scheduleRepeat(this.playMetronomeFunction.bind(this), this._calculateTime(this.beat, this.measure));
+        this._metronomeClick =  Tone.Transport.scheduleRepeat(this.playMetronomeFirstMeasureFunction.bind(this), parseInt(this.measure/4) + "n");       
 
 
         this._transportId = Tone.Transport.scheduleRepeat(this.playSynthFunction.bind(this), this.barsBeforeSwitch + ":0:0");        
         Tone.Transport.start();
       }
 
-      _calculateTime(beat, note) {
-        switch (note) {
+      _calculateTime(beat, measure) {
+        switch (measure) {
           case 2:
           case "2":
             return parseInt(beat/2) + "n";
