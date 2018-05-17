@@ -39,6 +39,7 @@
         flex-direction: row;
         justify-content: flex-start;
         margin-top: 0;
+        position: relative;
       }
 
       increment-stepper {
@@ -46,17 +47,29 @@
         height: 120px;
         @apply --ptg-font-body-base;
       }
+      
       paper-slider {
         width: 80%;
         @apply --ptg-font-body-base;
         --paper-slider-input: {
           width: 70px;
+          
+        }
+        --paper-slider-input-container-input: {
+          background-color: darkgrey;
+          color: #FFFFFF;
+
         }
       }
 
       paper-toggle-button {
         margin-right: 14px;
         @apply --ptg-font-body-base;
+        --paper-toggle-button-label-color: #FFFFFF;
+        --paper-toggle-button-unchecked-bar-color: #FFFFFF;
+        --paper-toggle-button-unchecked-button-color: #FFFFFF;
+        --paper-toggle-button-unchecked-ink-color: #FFFFFF;
+        --paper-toggle-button-checked-ink-color: #FFFFFF;
       }  
 
       section {
@@ -76,7 +89,7 @@
       }
 
       footer span {
-        line-height: 56px;
+        line-height: 118px;
       }
 
       .flex-end {
@@ -186,8 +199,13 @@
           height: calc(calc(var(--bar-height)-4px) * 1.5);   
           top: calc(50% -4px);
         }
+      }
 
-
+      paper-icon-button {
+        position: absolute;
+        right: 4px;
+        top: 42px;
+        color: #FFFFFF;
       }
 
       [hidden] {
@@ -213,6 +231,11 @@
         ></increment-stepper>
 
         <paper-toggle-button checked="{{runGenerator}}">On/Off</paper-toggle-button>
+        <paper-icon-button 
+          icon="ptg-icons:settings" 
+          alt="settings" 
+          on-click="_switchPageIntend"
+        ></paper-icon-button>
       </header>
 
       <section class="relative">
@@ -296,6 +319,10 @@
         // Cut off octave Number and replace # with sharp (since Filepaths don't like #)
         var tone = toneWithOctave.substring(0, toneWithOctave.length -1).replace("#", "sharp");
         return "../../images/" + tone + ".svg";
+      }
+
+      _switchPageIntend() {
+        this.dispatchEvent(new CustomEvent('switch-page-intend'));
       }
     }
 

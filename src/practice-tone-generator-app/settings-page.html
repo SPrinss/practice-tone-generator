@@ -1,7 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
-<link rel="import" href="increment-stepper.html">
+<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="ptg-icons.html">
 
 <dom-module id="settings-page">
   <template>
@@ -9,6 +15,12 @@
       :host {
         display: block;
       }
+
+      * {
+        box-sizing: border-box;
+        color: #FFFFFF;
+      }
+
       input {
         -moz-transform: scaleX(-1);
         -o-transform: scaleX(-1);
@@ -17,39 +29,169 @@
         filter: FlipH;
         -ms-filter: "FlipH";
       }
-      header, main, footer {
+
+      main {
+        margin: auto;
+        max-width: 600px;
+        padding: 8px;
+        width: 100%;
+        display: grid;
+        grid-gap: 16px;
+        grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));        
+        grid-template-columns: 0.5fr 0.5fr;
+      }
+
+      section {
+        border: 1px solid darkgrey;
+        border-radius: 5%;
+        padding: 12px;
+      }
+
+      header {
+        padding-left: 8px;
+        line-height: 120px;
+        height: 120px;
         margin: auto;
         max-width: 600px;
         width: 100%;
-      }     
+        position: relative;
+      }      
+
+      header h1 {
+        margin: 0;
+      }
+
+      @media screen and (min-device-width: 599px) {
+        section {
+          padding: 24px;
+        }
+        main {
+          padding: 0;
+        }
+        header {
+          padding: 0;
+        }
+        paper-slider {
+          width: 80%;
+        }
+        paper-listbox {
+          width: 200px;
+        }
+      }
+
       paper-radio-button {
         display: block;
+        --paper-radio-button-unchecked-background-color: #FFFFFF;
+        --paper-radio-button-unchecked-color: #FFFFFF;
+        --paper-radio-button-unchecked-ink-color: #FFFFFF;
+        --paper-radio-button-label-color: #FFFFFF;
       } 
+
+      paper-item {
+        color: black;
+      }
+
+      paper-dropdown-menu {
+        --paper-dropdown-menu-input: {
+          color: #FFFFFF;
+        }
+        --paper-input-container-input: {
+          color: #FFFFFF;
+          font-style: normal;
+          font-family: serif;
+          text-transform: uppercase;
+        };
+      }
+
+      paper-slider {
+        width: 100%;
+        @apply --ptg-font-body-base;
+        --paper-slider-input: {
+          width: 70px; 
+        }
+        --paper-slider-input-container-input: {
+          background-color: darkgrey;
+          color: #FFFFFF;
+        }
+      }
+
+      paper-listbox {
+        --paper-listbox-color: #FFFFFF;
+        --paper-listbox: {
+          width: 140px;
+          color: #FFFFFF;
+        }
+      }
+
+      paper-icon-button {
+        position: absolute;
+        right: 4px;
+        top: 42px;
+        color: #FFFFFF;
+      }
+
     </style>
 
+    <header>
+      <h1>Settings</h1>
+      <paper-icon-button 
+        icon="ptg-icons:arrow-back" 
+        alt="settings" 
+        on-click="_switchPageIntend"
+      ></paper-icon-button>
+    </header>
+
     <main>
-      <paper-radio-group selected="{{keyType}}" aria-labelledby="label2">
-        <paper-radio-button name="all">All</paper-radio-button>
-        <paper-radio-button name="sharps">Sharps only</paper-radio-button>
-        <paper-radio-button name="flats">Flats only</paper-radio-button>
-        <paper-radio-button name="whiteKeys">White keys only</paper-radio-button>
-      </paper-radio-group>
+      <section>
+        <h1>Tone type</h1>        
+        <paper-radio-group selected="{{keyType}}" aria-labelledby="label2">
+          <paper-radio-button name="all">All</paper-radio-button>
+          <paper-radio-button name="sharps">Sharps only</paper-radio-button>
+          <paper-radio-button name="flats">Flats only</paper-radio-button>
+          <paper-radio-button name="whiteKeys">White keys only</paper-radio-button>
+        </paper-radio-group>
+      </section>
 
-      <increment-stepper 
-        title="Bars to practice tone"
-        values="[[barsBeforeSwitchOptions]]"
-        selected-index="{{barsBeforeSwitchIndex}}"
-        selected-value="{{barsBeforeSwitch}}"
-      ></increment-stepper>
+      <section>
+        <h1># Bars before next tone</h1>
+        <paper-slider pin min="1" max="20" editable value="{{barsBeforeSwitch}}"></paper-slider>
+      </section>
 
-      <div>
-        <span>Metronome volume</span>
-        <input type="range" min="1" max="30" value="{{metronomeVolume::change}}">
-      </div>
-      <div>
-        <span>Synth volume</span>
-        <input type="range" min="1" max="30" value="{{synthVolume::change}}">
-      </div>
+      <section>
+        <h1>Volume</h1>
+        <div>
+          <span>Metronome volume</span>
+          <paper-slider pin min="0" max="30" value="{{metronomeVolume}}"></paper-slider>
+        </div>
+        <div>
+          <span>Synth volume</span>
+          <paper-slider pin min="0" max="30" value="{{synthVolume}}"></paper-slider>          
+        </div>
+      </section>
+
+      <section>
+        <h1>Metronome sound</h1>
+        <paper-dropdown-menu value="{{metronomeSound}}">
+          <paper-listbox slot="dropdown-content">
+            <paper-item>Croissant</paper-item>
+            <paper-item>Donut</paper-item>
+            <paper-item>Financier</paper-item>
+            <paper-item>Madeleine</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </section>
+
+      <section>
+        <h1>Background sound</h1>
+        <paper-dropdown-menu value="{{metronomeSound}}">
+            <paper-listbox slot="dropdown-content">
+              <paper-item>Croissant</paper-item>
+              <paper-item>Donut</paper-item>
+              <paper-item>Financier</paper-item>
+              <paper-item>Madeleine</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+      </section>
 
     </main>
   </template>
@@ -78,12 +220,20 @@
           },
           metronomeVolume: {
             type: String,
-            value: "5",
+            value: "10",
+            notify: true
+          },
+          metronomeSound: {
+            type: String,
+            notify: true
+          },
+          synthSound: {
+            type: String,
             notify: true
           },
           synthVolume: {
             type: String,
-            value: "10",
+            value: "0",
             notify: true
           },
           barsBeforeSwitchOptions: {
@@ -101,6 +251,10 @@
             notify: true
           },          
         };
+      }
+
+      _switchPageIntend() {
+        this.dispatchEvent(new CustomEvent('switch-page-intend'));
       }
     }
 
