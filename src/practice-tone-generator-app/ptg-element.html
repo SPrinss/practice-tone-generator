@@ -136,6 +136,8 @@
         this._player = new Tone.Player("./sounds/click.wav").toMaster();
         
         this._synth =  new Tone.Synth().toMaster()
+        // synth muted by default
+        this._synth.volume.value = -10000;
 
         let nextToneIndex = Math.floor(Math.random() * Math.floor(this.tones.length -1));
         let nextTone = this.tones[nextToneIndex] + this.octave;
@@ -209,17 +211,17 @@
       }
 
       _setSynthVolume(volume) {
-        if(volume && this._synth) {
-          this._synth.volume.value = - volume;
-          if(volume == "30") return this._synth.volume.value = -10000;
+        if(this._synth) {
+          this._synth.volume.value =  volume;
+          if(volume == "0") return this._synth.volume.value = -10000;
         }
       }
 
       _setMetronomeVolume(volume) {
-        if(volume && Object.keys(this._player).length > 0 && Object.keys(this._clickPlayer).length > 0) {
-          this._player.volume.value = - volume;
-          this._clickPlayer.volume.value = - volume;
-          if (volume == "30") {
+        if(Object.keys(this._player).length > 0 && Object.keys(this._clickPlayer).length > 0) {
+          this._player.volume.value =  volume;
+          this._clickPlayer.volume.value =  volume;
+          if (volume == "0") {
             this._player.mute=true;
             return this._clickPlayer.mute=true;
           }
