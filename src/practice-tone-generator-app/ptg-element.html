@@ -166,13 +166,9 @@
         // synth.triggerAttackRelease(tone, this.barsBeforeSwitch + ":0:0", time);
 
         Tone.Draw.schedule((function(time){
-          // Slice call without arguments 'clones' the Array
-          var possibleTones = this.tones.slice();
-          if(this.noSuccedentIdenticalNotes) possibleTones.splice(possibleTones.indexOf(tone.substring(0, tone.length -1)), 1);
-          let nextToneIndex = Math.floor(Math.random() * Math.floor(possibleTones.length -1));
-          let nextTone = possibleTones[nextToneIndex] + this.octave;
+
           this.set('tone', tone)
-          this.set('nextTone', nextTone)
+          this.set('nextTone', this._selectNextTone())
           
           //this callback is invoked from a requestAnimationFrame
           //and will be invoked close to AudioContext time
@@ -193,11 +189,26 @@
       repeatCurrentTone() {
         this.set('_repeatingCurrentTone', true)
       }
+
+      skipCurrentTone() {
+        this.set('tone', this.nextTone)
+        this.set('nextTone', this._selectNextTone())
+      }
+
       _handleBarsBeforeSwitchChanged(barsBeforeSwitch, oldBarsBeforeSwitch) {
         if(barsBeforeSwitch == oldBarsBeforeSwitch || typeof oldBarsBeforeSwitch == 'undefined') return;
         this._stop()
         if(!this.runGenerator) return;
         this._start()
+      }
+
+      _selectNextTone() {
+        // Slice call without arguments 'clones' the Array
+        var possibleTones = this.tones.slice();
+        if(this.noSuccedentIdenticalNotes) possibleTones.splice(possibleTones.indexOf(tone.substring(0, tone.length -1)), 1);
+        let nextToneIndex = Math.floor(Math.random() * Math.floor(possibleTones.length -1));
+        let nextTone = possibleTones[nextToneIndex] + this.octave;
+        return nextTone;
       }
 
       _handleBeatChange(beat, oldBeat) {

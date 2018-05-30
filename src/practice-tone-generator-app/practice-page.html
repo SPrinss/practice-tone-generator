@@ -298,6 +298,7 @@
         alt="next-button" 
         animation="rotate" 
         rotation="360"
+        on-click="_handleSkipCurrentToneAttempt"
       ></toggle-icon> 
 
       <paper-icon-button 
@@ -419,6 +420,10 @@
       _handleRepeatToneAttempt() {
         this.dispatchEvent(new CustomEvent('repeat-tone-intend'));
       }
+
+      _handleSkipCurrentToneAttempt() {
+        this.dispatchEvent(new CustomEvent('skip-current-tone-intend'));
+      }      
     }
 
     window.customElements.define(PracticePage.is, PracticePage);
