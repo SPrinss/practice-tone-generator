@@ -12,7 +12,8 @@
     "iron-pages": "PolymerElements/iron-pages#^2.1.1",
     "skeleton-carousel": "FabricElements/skeleton-carousel#^2.0.5",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.1.0",
-    "paper-item": "PolymerElements/paper-item#^2.1.1"
+    "paper-item": "PolymerElements/paper-item#^2.1.1",
+    "toggle-icon": "^2.0.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

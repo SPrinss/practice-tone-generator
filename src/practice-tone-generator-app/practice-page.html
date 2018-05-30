@@ -1,8 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/polymer/lib/utils/gestures.html">
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 <link rel="import" href="increment-stepper.html">
 <link rel="import" href="ptg-image.html">
+<link rel="import" href="play-pause-button.html">
+<link rel="import" href="toggle-button.html">
+<link rel="import" href="../../bower_components/toggle-icon/toggle-icon.html">
 
 <link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
 
@@ -21,6 +24,7 @@
         color: white;
       }
       main {
+        position: relative;
         margin: auto;
         height: 100%;
         max-width: var(--max-width);
@@ -67,6 +71,12 @@
         flex-wrap: wrap;
       }
 
+      increment-stepper {
+        width: 60px;
+        height: 120px;
+        @apply --ptg-font-body-base;
+      }
+      
       paper-slider {
         width: 100%;
       }
@@ -176,6 +186,13 @@
         width: 50%;
       }
 
+      toggle-icon {
+        --toggle-icon-buttons: {
+          width: 60px;
+          height: 60px;
+        }
+      }      
+
       @media screen and (min-device-width: 599px) {
         #current-tone {
           height: calc(var(--tone-size) * 1.5);
@@ -193,13 +210,55 @@
           width: calc(var(--next-tone-width) * 1.5);
           height: calc(calc(var(--bar-height)-4px) * 1.5);   
           top: calc(50% -4px);
-        }
+        }        
+
+        toggle-icon {
+          --toggle-icon-buttons: {
+            width: 50px;
+            height: 50px;
+          }
+        }        
       }
 
       paper-icon-button {
+        z-index: 2;
+        cursor: pointer;
+      }
+
+      #time-signure-button {
         position: absolute;
-        right: 4px;
-        top: 42px;
+        left: 8%;
+        top: 8%;
+        z-index: 2;
+      }
+
+      #repeat-button {
+        position: absolute;
+        right: 20%;
+        bottom: 23%;
+        z-index: 2;
+      }
+
+      #next-button {
+        position: absolute;
+        right: 8%;
+        bottom: 10%;
+        z-index: 2;        
+      }      
+
+      #play-pause-button {
+        /* width: 44px; */
+        stroke: white;
+        position: absolute;
+        left: 22%;
+        top: 22%;
+        z-index: 2;
+      }
+
+      #settings-button {
+        position: absolute;
+        right: 10%;
+        top: 10%;
         color: #FFFFFF;
       }
 
@@ -210,8 +269,44 @@
     </style>
 
     <main>
-      <header>
-        <increment-stepper 
+      <!-- <play-pause-button playing="{{runGenerator}}"></play-pause-button> -->
+
+      <toggle-icon 
+        id="play-pause-button"
+        icon="ptg-icons:play-arrow" 
+        icon-checked="ptg-icons:pause" 
+        alt="repeat-button"
+        on-click="_toggleRunGenerator"
+      ></toggle-icon>
+
+      <toggle-button id="time-signure-button">
+        <span slot="body">[[beat]] / [[measure]]</span>
+      </toggle-button>
+
+      <toggle-icon 
+        id="repeat-button"
+        icon="ptg-icons:repeat" 
+        alt="repeat-button" 
+        animation="rotate" 
+        rotation="360"
+      ></toggle-icon>
+      
+      <toggle-icon 
+        id="next-button"
+        icon="ptg-icons:skip-next" 
+        alt="next-button" 
+        animation="rotate" 
+        rotation="360"
+      ></toggle-icon> 
+
+      <paper-icon-button 
+        id="settings-button"
+        icon="ptg-icons:settings" 
+        alt="settings" 
+        on-click="_switchPageIntend"
+      ></paper-icon-button>
+
+        <!-- <increment-stepper 
           values="[[beats]]"
           selected-index="{{beatIndex}}"
           selected-value="{{beat}}"
@@ -223,15 +318,8 @@
           values="[[measures]]"
           selected-index="{{measureIndex}}"
           selected-value="{{measure}}"
-        ></increment-stepper>
-
-        <paper-toggle-button checked="{{runGenerator}}">On/Off</paper-toggle-button>
-        <paper-icon-button 
-          icon="ptg-icons:settings" 
-          alt="settings" 
-          on-click="_switchPageIntend"
-        ></paper-icon-button>
-      </header>
+        ></increment-stepper> -->
+        <header></header>
 
       <section class="relative">
           <img src="../../images/circle.svg" id="circle" alt="">
@@ -243,8 +331,6 @@
       </section>
 
       <footer>
-        <span>BPM</span>
-        <paper-slider pin min="30" max="200" editable value="{{bpm}}"></paper-slider>
         <input id="bpm-input" min="30" max="200" type="number" value="{{bpm::change}}">
         <paper-slider pin min="30" max="200" value="{{bpm}}"></paper-slider>
       </footer>
@@ -285,6 +371,7 @@
           },
           beat: {
             type: String,
+            value: "4",
             notify: true
           },
           measures: {
@@ -299,10 +386,12 @@
           },
           measure: {
             type: String,
+            value: "4",
             notify: true
           },   
           runGenerator: {
             type: Boolean,
+            value: false,
             notify: true
           },
           bpm: {
@@ -316,6 +405,10 @@
         // Cut off octave Number and replace # with sharp (since Filepaths don't like #)
         var tone = toneWithOctave.substring(0, toneWithOctave.length -1).replace("#", "sharp");
         return "../../images/" + tone + ".svg";
+      }
+
+      _toggleRunGenerator() {
+        this.set('runGenerator', !this.runGenerator)
       }
 
       _switchPageIntend() {
