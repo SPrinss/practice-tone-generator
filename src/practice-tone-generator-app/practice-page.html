@@ -51,36 +51,6 @@
         position: relative;
       }
 
-      increment-stepper {
-        width: 60px;
-        height: 120px;
-        @apply --ptg-font-body-base;
-      }
-      
-      paper-slider {
-        width: 80%;
-        @apply --ptg-font-body-base;
-        --paper-slider-input: {
-          width: 70px;
-          
-        }
-        --paper-slider-input-container-input: {
-          background-color: darkgrey;
-          color: #FFFFFF;
-
-        }
-      }
-
-      paper-toggle-button {
-        margin-right: 14px;
-        @apply --ptg-font-body-base;
-        --paper-toggle-button-label-color: #FFFFFF;
-        --paper-toggle-button-unchecked-bar-color: #FFFFFF;
-        --paper-toggle-button-unchecked-button-color: #FFFFFF;
-        --paper-toggle-button-unchecked-ink-color: #FFFFFF;
-        --paper-toggle-button-checked-ink-color: #FFFFFF;
-      }  
-
       section {
         width: 100%; 
         margin: auto;
@@ -95,6 +65,22 @@
         justify-content: flex-start;
         flex-direction: row;
         flex-wrap: wrap;
+      }
+
+      paper-slider {
+        width: 100%;
+      }
+
+      #bpm-input {
+        @apply --ptg-font-body-base;
+        color: white;
+        margin-left: 40px;
+        background-color: black;
+        border: 0.5px solid darkgrey;
+        width: 60px;        
+        height: 40px;
+        text-align:center;
+
       }
 
       footer span {
@@ -259,6 +245,8 @@
       <footer>
         <span>BPM</span>
         <paper-slider pin min="30" max="200" editable value="{{bpm}}"></paper-slider>
+        <input id="bpm-input" min="30" max="200" type="number" value="{{bpm::change}}">
+        <paper-slider pin min="30" max="200" value="{{bpm}}"></paper-slider>
       </footer>
     </main>
 
