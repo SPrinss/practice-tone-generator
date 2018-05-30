@@ -154,7 +154,7 @@
         var synth = this._synth;
         var tone = this.nextTone;
 
-        synth.triggerAttackRelease(tone, this.barsBeforeSwitch + ":0:0", time);
+        // synth.triggerAttackRelease(tone, this.barsBeforeSwitch + ":0:0", time);
 
         Tone.Draw.schedule((function(time){
           let nextToneIndex = Math.floor(Math.random() * Math.floor(this.tones.length -1));
