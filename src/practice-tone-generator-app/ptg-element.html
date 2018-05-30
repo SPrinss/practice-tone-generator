@@ -212,15 +212,15 @@
 
       _setSynthVolume(volume) {
         if(this._synth) {
-          this._synth.volume.value =  volume;
+          this._synth.volume.value =  this._computeVolumeToDb(volume);
           if(volume == "0") return this._synth.volume.value = -10000;
         }
       }
 
       _setMetronomeVolume(volume) {
         if(Object.keys(this._player).length > 0 && Object.keys(this._clickPlayer).length > 0) {
-          this._player.volume.value =  volume;
-          this._clickPlayer.volume.value =  volume;
+          this._player.volume.value =  this._computeVolumeToDb(volume);;
+          this._clickPlayer.volume.value =  this._computeVolumeToDb(volume);;
           if (volume == "0") {
             this._player.mute=true;
             return this._clickPlayer.mute=true;
@@ -316,6 +316,11 @@
         }
         return tones;
       }      
+
+      _computeVolumeToDb(volume) {
+        var volInDb = (volume - 10) / 2;
+        return volInDb;
+      }
     }
 
     window.customElements.define(PtgElement.is, PtgElement);

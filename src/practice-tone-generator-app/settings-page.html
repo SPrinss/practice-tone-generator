@@ -161,11 +161,11 @@
         <h1>Volume</h1>
         <div>
           <span>Metronome volume</span>
-          <paper-slider pin min="0" max="30" value="{{metronomeVolume}}"></paper-slider>
+          <paper-slider pin min="0" max="100" value="{{metronomeVolume}}"></paper-slider>
         </div>
         <div>
           <span>Synth volume</span>
-          <paper-slider pin min="0" max="30" value="{{synthVolume}}"></paper-slider>          
+          <paper-slider pin min="0" max="100" value="{{synthVolume}}"></paper-slider>          
         </div>
       </section>
 
@@ -220,7 +220,7 @@
           },
           metronomeVolume: {
             type: String,
-            value: "10",
+            value: "40",
             notify: true
           },
           metronomeSound: {
