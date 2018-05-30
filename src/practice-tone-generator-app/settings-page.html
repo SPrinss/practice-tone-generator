@@ -143,13 +143,15 @@
 
     <main>
       <section>
-        <h1>Tone type</h1>        
+        <h1>Tone type</h1>
+
         <paper-radio-group selected="{{keyType}}" aria-labelledby="label2">
           <paper-radio-button name="all">All</paper-radio-button>
           <paper-radio-button name="sharps">Sharps only</paper-radio-button>
           <paper-radio-button name="flats">Flats only</paper-radio-button>
           <paper-radio-button name="whiteKeys">White keys only</paper-radio-button>
         </paper-radio-group>
+        
       </section>
 
       <section>
@@ -163,34 +165,6 @@
           <span>Metronome volume</span>
           <paper-slider pin min="0" max="100" value="{{metronomeVolume}}"></paper-slider>
         </div>
-        <div>
-          <span>Synth volume</span>
-          <paper-slider pin min="0" max="100" value="{{synthVolume}}"></paper-slider>          
-        </div>
-      </section>
-
-      <section>
-        <h1>Metronome sound</h1>
-        <paper-dropdown-menu value="{{metronomeSound}}">
-          <paper-listbox slot="dropdown-content">
-            <paper-item>Croissant</paper-item>
-            <paper-item>Donut</paper-item>
-            <paper-item>Financier</paper-item>
-            <paper-item>Madeleine</paper-item>
-          </paper-listbox>
-        </paper-dropdown-menu>
-      </section>
-
-      <section>
-        <h1>Background sound</h1>
-        <paper-dropdown-menu value="{{metronomeSound}}">
-            <paper-listbox slot="dropdown-content">
-              <paper-item>Croissant</paper-item>
-              <paper-item>Donut</paper-item>
-              <paper-item>Financier</paper-item>
-              <paper-item>Madeleine</paper-item>
-            </paper-listbox>
-          </paper-dropdown-menu>
       </section>
 
     </main>
@@ -221,14 +195,6 @@
           metronomeVolume: {
             type: String,
             value: "40",
-            notify: true
-          },
-          metronomeSound: {
-            type: String,
-            notify: true
-          },
-          synthSound: {
-            type: String,
             notify: true
           },
           synthVolume: {
