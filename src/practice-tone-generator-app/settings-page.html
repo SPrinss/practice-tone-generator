@@ -151,6 +151,11 @@
           <paper-radio-button name="flats">Flats only</paper-radio-button>
           <paper-radio-button name="whiteKeys">White keys only</paper-radio-button>
         </paper-radio-group>
+
+        <div>
+          <input type="checkbox" value="{{noSuccedentIdenticalNotes::change}}">
+          <span>No succesent identical tones</span>
+        </div>
         
       </section>
 
@@ -215,7 +220,12 @@
           barsBeforeSwitch: {
             type: String,
             notify: true
-          },          
+          },
+          noSuccedentIdenticalNotes: {
+            type: Boolean,
+            value: false,
+            notify: true
+          }        
         };
       }
 

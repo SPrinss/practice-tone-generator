@@ -80,7 +80,11 @@
           octave: {
             type: Number,
             value: 4
-          },          
+          },
+          noSuccedentIdenticalNotes: {
+            type: Boolean,
+            value: false
+          },       
           _synthStarted: {
             type: Boolean,
             value: false
@@ -114,7 +118,7 @@
           _metronomeClick: {
             type: Object,
             value: {}
-          },          
+          },     
         };
       }
 
@@ -157,8 +161,11 @@
         // synth.triggerAttackRelease(tone, this.barsBeforeSwitch + ":0:0", time);
 
         Tone.Draw.schedule((function(time){
-          let nextToneIndex = Math.floor(Math.random() * Math.floor(this.tones.length -1));
-          let nextTone = this.tones[nextToneIndex] + this.octave;
+          // Slice call without arguments 'clones' the Array
+          var possibleTones = this.tones.slice();
+          if(this.noSuccedentIdenticalNotes) possibleTones.splice(possibleTones.indexOf(tone.substring(0, tone.length -1)), 1);
+          let nextToneIndex = Math.floor(Math.random() * Math.floor(possibleTones.length -1));
+          let nextTone = possibleTones[nextToneIndex] + this.octave;
           this.set('tone', tone)
           this.set('nextTone', nextTone)
           
