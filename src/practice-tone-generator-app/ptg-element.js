@@ -113,12 +113,17 @@ export class PtgElement extends PolymerElement {
       _toneLibraryLoaded: {
         type: Boolean,
         value: false
+      },
+      userInteracted: {
+        type: Boolean,
+        value: false,
+        observer: "_handleUserInteractedChanged"
       }
     };
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  _handleUserInteractedChanged(userInteracted) {
+    if(!userInteracted) return;
     this._loadScript('../../node_modules/tone/build/tone.min.js', this._setToneLibraryLoaded.bind(this))
   }
 
@@ -257,10 +262,8 @@ export class PtgElement extends PolymerElement {
     return this._stop()
   }
   
-
   _start() {
-    if(!this.runGenerator) return;
-    // if(Tone.Transport.state == "started") return;
+    if(!this.runGenerator || !this.userInteracted || Tone.Transport.state == "started") return;
     this._setTimeSignature();
     this._metronome = Tone.Transport.scheduleRepeat(this.playMetronomeFunction.bind(this), this.measure + "n", "0:0:0");
     this._metronomeClick =  Tone.Transport.scheduleRepeat(this.playMetronomeFirstMeasureFunction.bind(this), "1:0:0", "0:0:0");

@@ -422,6 +422,11 @@ class PracticePage extends PolymerElement {
         value: false,
         notify: true,
         reflectToAttribute: true
+      },
+      userInteracted: {
+        type: Boolean,
+        value: false,
+        notify: true
       }
     };
   }
@@ -433,7 +438,13 @@ class PracticePage extends PolymerElement {
   }
 
   _toggleRunGenerator() {
-    this.set('runGenerator', !this.runGenerator)
+    var context = new AudioContext();
+
+    this.set('userInteracted', true)
+    window.setTimeout((function () {
+      this.set('runGenerator', !this.runGenerator)
+    }.bind(this)), 500)
+    
   }
 
   _switchPageIntend() {
