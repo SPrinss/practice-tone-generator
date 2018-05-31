@@ -1,7 +1,7 @@
 {
   "name": "practice-tone-generator",
   "description": "Small PWA that displays and plays tones on a certain BPM.",
-  "main": "index.html",
+  "main": "index.js",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "paper-radio-group": "PolymerElements/paper-radio-group#^2.2.0",

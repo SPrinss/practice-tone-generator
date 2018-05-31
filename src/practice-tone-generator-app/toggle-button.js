@@ -1,7 +1,16 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-
-<dom-module id="toggle-button">
-  <template>
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+/**
+  * `toggle-button` Description
+  *
+  * @summary ShortDescription.
+  * @customElement
+  * @polymer
+  * @extends {Polymer.Element}
+  */
+class toggleButton extends PolymerElement {
+  static get template() {
+    return html`
     <style>
       :host {
         display: flex;
@@ -74,40 +83,29 @@
     <button>
       <slot name="body"></slot>
     </button>
+`;
+  }
 
-  </template>
-  <script>
-    /**
-      * `toggle-button` Description
-      *
-      * @summary ShortDescription.
-      * @customElement
-      * @polymer
-      * @extends {Polymer.Element}
-      */
-    class toggleButton extends Polymer.Element {
-      static get is() { return 'toggle-button';}
-      static get properties() {
-        return {
-          active: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            reflectToAttribute: true
-          }
-        }
-      }
-
-      ready() {
-        this.addEventListener('click', this.toggle);
-        super.ready();
-      }
-      
-      toggle() {
-        this.set('active', !this.active);
+  static get is() { return 'toggle-button';}
+  static get properties() {
+    return {
+      active: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true
       }
     }
+  }
 
-    window.customElements.define(toggleButton.is, toggleButton);
-  </script>
-</dom-module>
+  ready() {
+    this.addEventListener('click', this.toggle);
+    super.ready();
+  }
+
+  toggle() {
+    this.set('active', !this.active);
+  }
+}
+
+window.customElements.define(toggleButton.is, toggleButton);

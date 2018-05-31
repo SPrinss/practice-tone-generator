@@ -1,15 +1,22 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/polymer/lib/utils/gestures.html">
-<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
-<link rel="import" href="increment-stepper.html">
-<link rel="import" href="ptg-image.html">
-<link rel="import" href="toggle-button.html">
-<link rel="import" href="../../bower_components/toggle-icon/toggle-icon.html">
-
-<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
-
-<dom-module id="practice-page">
-  <template>
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/polymer/lib/utils/gestures.js';
+import '@polymer/paper-slider/paper-slider.js';
+import './increment-stepper.js';
+import './ptg-image.js';
+import './toggle-button.js';
+import '@polymer/toggle-icon/toggle-icon.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+/**
+ * `practice-page` Description
+ *
+ * @summary ShortDescription.
+ * @customElement
+ * @polymer
+ * @extends {Polymer.Element}
+ */
+class PracticePage extends PolymerElement {
+  static get template() {
+    return html`
     <style>
       :host {
         display: block;
@@ -327,30 +334,16 @@
         animation="rotate" 
         rotation="360"
         on-click="_handleSkipCurrentToneAttempt"
-      ></toggle-icon> 
+      ></toggle-icon>
+      <paper-icon-button id="settings-button" icon="ptg-icons:settings" alt="settings" on-click="_switchPageIntend"></paper-icon-button>
 
-      <paper-icon-button 
-        id="settings-button"
-        icon="ptg-icons:settings" 
-        alt="settings" 
-        on-click="_switchPageIntend"
-      ></paper-icon-button>
-
-      <div id="time-signature-overlay" data-show-overlay$="[[showOverlay]]">
+      <div id="time-signature-overlay" data-show-overlay\$="[[showOverlay]]">
         <div id="time-signature-overlay-content">
-          <increment-stepper 
-            values="[[beats]]"
-            selected-index="{{beatIndex}}"
-            selected-value="{{beat}}"
-          ></increment-stepper>
+          <increment-stepper values="[[beats]]" selected-index="{{beatIndex}}" selected-value="{{beat}}"></increment-stepper>
 
           <p id="signatureDash">/</p>
 
-          <increment-stepper 
-            values="[[measures]]"
-            selected-index="{{measureIndex}}"
-            selected-value="{{measure}}"
-          ></increment-stepper>
+          <increment-stepper values="[[measures]]" selected-index="{{measureIndex}}" selected-value="{{measure}}"></increment-stepper>
         </div>
       </div>
 
@@ -359,124 +352,112 @@
 
       <section class="relative">
         <img src="../../images/circle.svg" id="circle" alt="">
-        <ptg-image id="current-tone" hidden$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
-        <ptg-image id="next-tone" hidden$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
-        <ptg-image id="next-text" hidden$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
+        <ptg-image id="current-tone" hidden\$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
+        <ptg-image id="next-tone" hidden\$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
+        <ptg-image id="next-text" hidden\$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
           
         <div id="bar-right"></div>
       </section>
 
       <footer>
         <input id="bpm-input" min="30" max="200" type="number" value="{{bpm::change}}">
-        <paper-slider pin min="30" max="200" value="{{bpm}}"></paper-slider>
+        <paper-slider pin="" min="30" max="200" value="{{bpm}}"></paper-slider>
       </footer>
     </main>
+`;
+  }
 
-  </template>
-
-  <script>
-    /**
-     * `practice-page` Description
-     *
-     * @summary ShortDescription.
-     * @customElement
-     * @polymer
-     * @extends {Polymer.Element}
-     */
-    class PracticePage extends Polymer.Element {
-      static get is() { return 'practice-page';}
-      static get properties() {
-        return {
-          tone: {
-            type: String,
-            value: ''
-          },
-          nextTone: {
-            type: String,
-            value: ''
-          },          
-          beats: {
-            type: Array,
-            value: function () {
-              return ['1', '2', '3', '4', '5','6', '7', '8', '9','10', '11', '12', '13']
-            }
-          },
-          beatIndex: {
-            type: Number,
-            value: 2
-          },
-          beat: {
-            type: String,
-            value: "4",
-            notify: true
-          },
-          measures: {
-            type: Array,
-            value: function () {
-              return ['2', '4', '8', '16']
-            }
-          },
-          measureIndex: {
-            type: Number,
-            value: 2
-          },
-          measure: {
-            type: String,
-            value: "4",
-            notify: true
-          },   
-          runGenerator: {
-            type: Boolean,
-            value: false,
-            notify: true
-          },
-          bpm: {
-            type: String,
-            notify: true
-          },
-          showOverlay: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            reflectToAttribute: true
-          }
-        };
+  static get is() { return 'practice-page';}
+  static get properties() {
+    return {
+      tone: {
+        type: String,
+        value: ''
+      },
+      nextTone: {
+        type: String,
+        value: ''
+      },          
+      beats: {
+        type: Array,
+        value: function () {
+          return ['1', '2', '3', '4', '5','6', '7', '8', '9','10', '11', '12', '13']
+        }
+      },
+      beatIndex: {
+        type: Number,
+        value: 2
+      },
+      beat: {
+        type: String,
+        value: "4",
+        notify: true
+      },
+      measures: {
+        type: Array,
+        value: function () {
+          return ['2', '4', '8', '16']
+        }
+      },
+      measureIndex: {
+        type: Number,
+        value: 2
+      },
+      measure: {
+        type: String,
+        value: "4",
+        notify: true
+      },   
+      runGenerator: {
+        type: Boolean,
+        value: false,
+        notify: true
+      },
+      bpm: {
+        type: String,
+        notify: true
+      },
+      showOverlay: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        reflectToAttribute: true
       }
+    };
+  }
 
-      _computeImgPath(toneWithOctave) {
-        // Cut off octave Number and replace # with sharp (since Filepaths don't like #)
-        var tone = toneWithOctave.substring(0, toneWithOctave.length -1).replace("#", "sharp");
-        return "../../images/" + tone + ".svg";
-      }
+  _computeImgPath(toneWithOctave) {
+    // Cut off octave Number and replace # with sharp (since Filepaths don't like #)
+    var tone = toneWithOctave.substring(0, toneWithOctave.length -1).replace("#", "sharp");
+    return "../../images/" + tone + ".svg";
+  }
 
-      _toggleRunGenerator() {
-        this.set('runGenerator', !this.runGenerator)
-      }
+  _toggleRunGenerator() {
+    this.set('runGenerator', !this.runGenerator)
+  }
 
-      _switchPageIntend() {
-        this.dispatchEvent(new CustomEvent('switch-page-intend'));
-      }
+  _switchPageIntend() {
+    this.dispatchEvent(new CustomEvent('switch-page-intend'));
+  }
 
-      _handleRepeatToneAttempt() {
-        this.dispatchEvent(new CustomEvent('repeat-tone-intend'));
-      }
+  _handleRepeatToneAttempt() {
+    this.dispatchEvent(new CustomEvent('repeat-tone-intend'));
+  }
 
-      _handleSkipCurrentToneAttempt() {
-        this.dispatchEvent(new CustomEvent('skip-current-tone-intend'));
-      }
+  _handleSkipCurrentToneAttempt() {
+    this.dispatchEvent(new CustomEvent('skip-current-tone-intend'));
+  }
 
-      _handleShowOverlayAttempt() {
-        console.log(!this.showOverlay)
-        this.set('showOverlay', !this.showOverlay)
-      }
+  _handleShowOverlayAttempt() {
+    console.log(!this.showOverlay)
+    this.set('showOverlay', !this.showOverlay)
+  }
 
-      _hideOverlay(evt) {
-        if(evt.target.id == "time-signure-button" || evt.target.id == "time-signature-overlay") return;
-        console.log('hide', evt.target.id)
-        this.set('showOverlay', false)        
-      }
-    }
+  _hideOverlay(evt) {
+    if(evt.target.id == "time-signure-button" || evt.target.id == "time-signature-overlay") return;
+    console.log('hide', evt.target.id)
+    this.set('showOverlay', false)        
+  }
+}
 
-    window.customElements.define(PracticePage.is, PracticePage);
-  </script>
-</dom-module>
+window.customElements.define(PracticePage.is, PracticePage);

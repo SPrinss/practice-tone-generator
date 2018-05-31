@@ -6,10 +6,10 @@
 
     <title>practice-tone-generator-app test</title>
 
-    <script src="../../../webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="../../../web-component-tester/browser.js"></script>
+    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../../wct-browser-legacy/browser.js"></script>
 
-    <link rel="import" href="../../src/practice-tone-generator-app/practice-tone-generator-app.html">
+    <script type="module" src="../../src/practice-tone-generator-app/practice-tone-generator-app.js"></script>
   </head>
   <body>
 
@@ -25,28 +25,29 @@
       </template>
     </test-fixture>
 
-    <script>
-      suite('practice-tone-generator-app', function() {
+    <script type="module">
+import '../../src/practice-tone-generator-app/practice-tone-generator-app.js';
+suite('practice-tone-generator-app', function() {
 
-        test('instantiating the element with default properties works', function() {
-          var element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'practice-tone-generator-app');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello practice-tone-generator-app!');
-        });
+  test('instantiating the element with default properties works', function() {
+    var element = fixture('BasicTestFixture');
+    assert.equal(element.prop1, 'practice-tone-generator-app');
+    var elementShadowRoot = element.shadowRoot;
+    var elementHeader = elementShadowRoot.querySelector('h2');
+    assert.equal(elementHeader.innerHTML, 'Hello practice-tone-generator-app!');
+  });
 
-        test('setting a property on the element works', function() {
-          // Create a test fixture
-          var element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
-        });
+  test('setting a property on the element works', function() {
+    // Create a test fixture
+    var element = fixture('ChangedPropertyTestFixture');
+    assert.equal(element.prop1, 'new-prop1');
+    var elementShadowRoot = element.shadowRoot;
+    var elementHeader = elementShadowRoot.querySelector('h2');
+    assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+  });
 
-      });
-    </script>
+});
+</script>
 
 
   </body>

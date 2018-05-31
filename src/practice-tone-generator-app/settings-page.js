@@ -1,15 +1,24 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
-<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
-<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
-<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../bower_components/neon-animation/web-animations.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="ptg-icons.html">
-
-<dom-module id="settings-page">
-  <template>
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-radio-group/paper-radio-group.js';
+import '@polymer/paper-radio-button/paper-radio-button.js';
+import '@polymer/paper-slider/paper-slider.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+import '@polymer/paper-item/paper-item.js';
+// import '@polymer/neon-animation/web-animations.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import './ptg-icons.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
+/**
+ * `settings-page` Description
+ *
+ * @summary ShortDescription.
+ * @customElement
+ * @polymer
+ * @extends {Polymer.Element}
+ */
+class SettingsPage extends PolymerElement {
+  static get template() {
+    return html`
     <style>
       :host {
         display: block;
@@ -123,11 +132,7 @@
 
     <header>
       <h1>Settings</h1>
-      <paper-icon-button 
-        icon="ptg-icons:arrow-back" 
-        alt="settings" 
-        on-click="_switchPageIntend"
-      ></paper-icon-button>
+      <paper-icon-button icon="ptg-icons:arrow-back" alt="settings" on-click="_switchPageIntend"></paper-icon-button>
     </header>
 
     <main>
@@ -150,79 +155,69 @@
 
       <section>
         <h1># Bars before next tone</h1>
-        <paper-slider pin min="1" max="20" editable value="{{barsBeforeSwitch}}"></paper-slider>
+        <paper-slider pin="" min="1" max="20" editable="" value="{{barsBeforeSwitch}}"></paper-slider>
       </section>
 
       <section>
         <h1>Volume</h1>
         <div>
           <span>Metronome volume</span>
-          <paper-slider pin min="0" max="100" value="{{metronomeVolume}}"></paper-slider>
+          <paper-slider pin="" min="0" max="100" value="{{metronomeVolume}}"></paper-slider>
         </div>
       </section>
 
     </main>
-  </template>
-  <script>
-    /**
-     * `settings-page` Description
-     *
-     * @summary ShortDescription.
-     * @customElement
-     * @polymer
-     * @extends {Polymer.Element}
-     */
-    class SettingsPage extends Polymer.Element {
-      static get is() {
-        return 'settings-page';
-      }
+`;
+  }
 
-      /**
-       * Object describing property-related metadata used by Polymer features
-       */
-      static get properties() {
-        return {
-          keyType: {
-            type: String,
-            notify: true
-          },
-          metronomeVolume: {
-            type: String,
-            value: "40",
-            notify: true
-          },
-          synthVolume: {
-            type: String,
-            value: "0",
-            notify: true
-          },
-          barsBeforeSwitchOptions: {
-            type: Array,
-            value: function () {
-              return ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-            }
-          },
-          barsBeforeSwitchIndex: {
-            type: Number,
-            value: 0
-          },   
-          barsBeforeSwitch: {
-            type: String,
-            notify: true
-          },
-          noSuccedentIdenticalNotes: {
-            type: Boolean,
-            value: false,
-            notify: true
-          }        
-        };
-      }
+  static get is() {
+    return 'settings-page';
+  }
 
-      _switchPageIntend() {
-        this.dispatchEvent(new CustomEvent('switch-page-intend'));
-      }
-    }
+  /**
+   * Object describing property-related metadata used by Polymer features
+   */
+  static get properties() {
+    return {
+      keyType: {
+        type: String,
+        notify: true
+      },
+      metronomeVolume: {
+        type: String,
+        value: "40",
+        notify: true
+      },
+      synthVolume: {
+        type: String,
+        value: "0",
+        notify: true
+      },
+      barsBeforeSwitchOptions: {
+        type: Array,
+        value: function () {
+          return ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        }
+      },
+      barsBeforeSwitchIndex: {
+        type: Number,
+        value: 0
+      },   
+      barsBeforeSwitch: {
+        type: String,
+        notify: true
+      },
+      noSuccedentIdenticalNotes: {
+        type: Boolean,
+        value: false,
+        notify: true
+      }        
+    };
+  }
 
-    window.customElements.define(SettingsPage.is, SettingsPage);
-  </script>
-</dom-module>
+  _switchPageIntend() {
+    this.dispatchEvent(new CustomEvent('switch-page-intend'));
+  }
+}
+
+window.customElements.define(SettingsPage.is, SettingsPage);
