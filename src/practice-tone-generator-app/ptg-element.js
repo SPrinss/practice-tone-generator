@@ -67,10 +67,6 @@ export class PtgElement extends PolymerElement {
         type: String,
         observer: "_handleBarsBeforeSwitchChanged"
       },
-      synthVolume: {
-        type: Number,
-        observer: "_setSynthVolume"
-      },
       metronomeVolume: {
         type: Number,
         observer: "_setMetronomeVolume"
@@ -83,10 +79,6 @@ export class PtgElement extends PolymerElement {
         type: Boolean,
         value: false
       },       
-      _synthStarted: {
-        type: Boolean,
-        value: false
-      },
       _player: {
         type: Object,
         value: {}
@@ -94,9 +86,6 @@ export class PtgElement extends PolymerElement {
       _clickPlayer: {
         type: Object,
         value: {}
-      },
-      _synth: {
-        type: Object
       },
       _transportReady: {
         type: Boolean,
@@ -168,10 +157,6 @@ export class PtgElement extends PolymerElement {
     Tone.Transport.bpm.value = this.bpm;
     this._clickPlayer = new Tone.Player("./sounds/woodblock.mp3").toMaster();
     this._player = new Tone.Player("./sounds/click.wav").toMaster();
-    
-    this._synth =  new Tone.Synth().toMaster()
-    // synth muted by default
-    this._synth.volume.value = -10000;
 
     let nextToneIndex = Math.floor(Math.random() * Math.floor(this.tones.length -1));
     let nextTone = this.tones[nextToneIndex] + this.octave;
@@ -183,13 +168,9 @@ export class PtgElement extends PolymerElement {
     this.set('_transportReady', true)
  }
 
-  playSynthFunction(time) {
+  startNewTone(time) {
     if(this._repeatingCurrentTone) return this.set('_repeatingCurrentTone', false);
-    var synth = this._synth;
-    var synth = this._synth;
     var tone = this.nextTone;
-
-    // synth.triggerAttackRelease(tone, this.barsBeforeSwitch + ":0:0", time);
 
     Tone.Draw.schedule((function(time){
 
@@ -224,7 +205,6 @@ export class PtgElement extends PolymerElement {
   _handleBarsBeforeSwitchChanged(barsBeforeSwitch, oldBarsBeforeSwitch) {
     if(barsBeforeSwitch == oldBarsBeforeSwitch || typeof oldBarsBeforeSwitch == 'undefined') return;
     this._stop()
-    if(!this.runGenerator) return;
     this._start()
   }
 
@@ -242,7 +222,6 @@ export class PtgElement extends PolymerElement {
     if(beat == oldBeat || typeof oldBeat == 'undefined') return;
     this._stop();
 
-    if(!this.runGenerator) return;
     window.setTimeout((function() {
       this._start()
     }.bind(this)), 300)
@@ -253,7 +232,6 @@ export class PtgElement extends PolymerElement {
     this._stop()
     this._setTimeSignature();
 
-    if(!this.runGenerator) return;
     window.setTimeout((function() {
       this._start()        
     }.bind(this)), 300)
@@ -261,13 +239,6 @@ export class PtgElement extends PolymerElement {
 
   _setTimeSignature() {
     Tone.Transport.timeSignature = [this.beat, this.measure];
-  }
-
-  _setSynthVolume(volume) {
-    if(this._synth) {
-      this._synth.volume.value =  this._computeVolumeToDb(volume);
-      if(volume == "0") return this._synth.volume.value = -10000;
-    }
   }
 
   _setMetronomeVolume(volume) {
@@ -278,7 +249,6 @@ export class PtgElement extends PolymerElement {
         this._player.mute=true;
         return this._clickPlayer.mute=true;
       }
-      this._synth.mute = false;
     }
   }
 
@@ -289,41 +259,13 @@ export class PtgElement extends PolymerElement {
   
 
   _start() {
-    if(Tone.Transport.state == "started") return;
-    
+    if(!this.runGenerator) return;
+    // if(Tone.Transport.state == "started") return;
     this._setTimeSignature();
-
-    // var _synth = new Tone.Synth().toMaster();
-    // this.set('_synth', _synth);
-    // console.log('_start', 'Tone.Transport.timeSignature:',Tone.Transport.timeSignature, 'this.beat', this.beat, (this.measure/this.beat))
-    this._metronome = Tone.Transport.scheduleRepeat(this.playMetronomeFunction.bind(this), this.measure + "n", "0:0:6");
-    this._metronomeClick =  Tone.Transport.scheduleRepeat(this.playMetronomeFirstMeasureFunction.bind(this), "1:0:0", "0:0:6");       
-
-
-    this._transportId = Tone.Transport.scheduleRepeat(this.playSynthFunction.bind(this), this.barsBeforeSwitch + ":0:0", "0:0:6");        
+    this._metronome = Tone.Transport.scheduleRepeat(this.playMetronomeFunction.bind(this), this.measure + "n", "0:0:0");
+    this._metronomeClick =  Tone.Transport.scheduleRepeat(this.playMetronomeFirstMeasureFunction.bind(this), "1:0:0", "0:0:0");
+    this._transportId = Tone.Transport.scheduleRepeat(this.startNewTone.bind(this), this.barsBeforeSwitch + ":0:0", "0:0:0");        
     Tone.Transport.start();
-  }
-
-  _calculateTime(beat, measure) {
-    switch (measure) {
-      case 2:
-      case "2":
-        return parseInt(beat/2) + "n";
-        break;
-      case 4:
-      case "4":
-        return beat + "n";
-        break;            
-      case 8:
-      case "8":
-        return (beat*2) + "n";
-        break;            
-      case 16:
-      case "16":
-        return (beat*4) + "n";
-        break;                                 
-    }
-
   }
 
   _stop() {
@@ -332,12 +274,10 @@ export class PtgElement extends PolymerElement {
     Tone.Transport.clear(this._metronome)
     Tone.Transport.clear(this._metronomeClick)
     
-    let synth = this._synth;
     let _clickPlayer = this._clickPlayer;
     let _player = this._player;
     if(_clickPlayer.stop) _clickPlayer.stop();
     if(_player.stop) _player.stop();
-    if(synth) synth.triggerRelease();
 
     Tone.Transport.stop();
 		  }
