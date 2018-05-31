@@ -1,7 +1,7 @@
 {
-  "name": "practice-tone-generator",
-  "short_name": "practice-tone-generator",
-  "description": "Small PWA that displays and plays tones on a certain BPM.",
+  "name": "Practice in all keys",
+  "short_name": "PIAK",
+  "description": "Small PWA that displays tones for a number of bars on a certain BPM.",
   "start_url": "/",
   "display": "standalone"
 }
