@@ -3,7 +3,6 @@
 <link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
 <link rel="import" href="increment-stepper.html">
 <link rel="import" href="ptg-image.html">
-<link rel="import" href="play-pause-button.html">
 <link rel="import" href="toggle-button.html">
 <link rel="import" href="../../bower_components/toggle-icon/toggle-icon.html">
 
@@ -71,6 +70,34 @@
         flex-wrap: wrap;
       }
 
+      #time-signature-overlay {
+        position: absolute;
+        top: 200%;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color:  rgba(255, 0, 0, .95);
+        z-index: 0;
+        transition: 0.7s;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: auto;
+      }
+
+      #time-signature-overlay[data-show-overlay] {
+        top: 50%;
+        z-index: 5;
+      }
+
+      #time-signature-overlay:not([data-show-overlay]) {
+        top: 200%;
+      }
+
+      #time-signature-overlay-content {
+        align-self: center;
+      }
+
       increment-stepper {
         width: 60px;
         height: 120px;
@@ -108,6 +135,7 @@
       }
 
       #signatureDash {
+        display: inline-block;
         text-align: center;
         line-height: 120px;
         font-size: 36px;
@@ -279,7 +307,7 @@
         on-click="_toggleRunGenerator"
       ></toggle-icon>
 
-      <toggle-button id="time-signure-button">
+      <toggle-button id="time-signure-button" on-click="_handleShowOverlayAttempt">
         <span slot="body">[[beat]] / [[measure]]</span>
       </toggle-button>
 
@@ -308,28 +336,34 @@
         on-click="_switchPageIntend"
       ></paper-icon-button>
 
-        <!-- <increment-stepper 
-          values="[[beats]]"
-          selected-index="{{beatIndex}}"
-          selected-value="{{beat}}"
-        ></increment-stepper>
+      <div id="time-signature-overlay" data-show-overlay$="[[showOverlay]]">
+        <div id="time-signature-overlay-content">
+          <increment-stepper 
+            values="[[beats]]"
+            selected-index="{{beatIndex}}"
+            selected-value="{{beat}}"
+          ></increment-stepper>
 
-        <p id="signatureDash">/</p>
+          <p id="signatureDash">/</p>
 
-        <increment-stepper 
-          values="[[measures]]"
-          selected-index="{{measureIndex}}"
-          selected-value="{{measure}}"
-        ></increment-stepper> -->
+          <increment-stepper 
+            values="[[measures]]"
+            selected-index="{{measureIndex}}"
+            selected-value="{{measure}}"
+          ></increment-stepper>
+        </div>
+      </div>
+
+
         <header></header>
 
       <section class="relative">
-          <img src="../../images/circle.svg" id="circle" alt="">
-          <ptg-image id="current-tone" hidden$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
-          <ptg-image id="next-tone" hidden$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
-          <ptg-image id="next-text" hidden$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
-            
-          <div id="bar-right"></div>
+        <img src="../../images/circle.svg" id="circle" alt="">
+        <ptg-image id="current-tone" hidden$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
+        <ptg-image id="next-tone" hidden$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
+        <ptg-image id="next-text" hidden$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
+          
+        <div id="bar-right"></div>
       </section>
 
       <footer>
@@ -399,7 +433,13 @@
           bpm: {
             type: String,
             notify: true
-          }       
+          },
+          showOverlay: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          }
         };
       }
 
@@ -423,7 +463,18 @@
 
       _handleSkipCurrentToneAttempt() {
         this.dispatchEvent(new CustomEvent('skip-current-tone-intend'));
-      }      
+      }
+
+      _handleShowOverlayAttempt() {
+        console.log(!this.showOverlay)
+        this.set('showOverlay', !this.showOverlay)
+      }
+
+      _hideOverlay(evt) {
+        if(evt.target.id == "time-signure-button" || evt.target.id == "time-signature-overlay") return;
+        console.log('hide', evt.target.id)
+        this.set('showOverlay', false)        
+      }
     }
 
     window.customElements.define(PracticePage.is, PracticePage);
