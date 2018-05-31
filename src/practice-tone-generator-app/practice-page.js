@@ -386,7 +386,7 @@ class PracticePage extends PolymerElement {
       },
       beatIndex: {
         type: Number,
-        value: 2
+        value: 3
       },
       beat: {
         type: String,
@@ -401,7 +401,7 @@ class PracticePage extends PolymerElement {
       },
       measureIndex: {
         type: Number,
-        value: 2
+        value: 1
       },
       measure: {
         type: String,
