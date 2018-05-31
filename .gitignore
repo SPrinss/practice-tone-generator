@@ -2,3 +2,4 @@ bower_components
 node_modules
 .DS_store
 yarn-error.log
+build/**
