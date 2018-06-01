@@ -1,11 +1,11 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import '@polymer/paper-radio-group/paper-radio-group.js';
-import '@polymer/paper-radio-button/paper-radio-button.js';
 import '@polymer/paper-slider/paper-slider.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-item/paper-item.js';
 // import '@polymer/neon-animation/web-animations.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/paper-button/paper-button.js';
+
 import './ptg-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 /**
@@ -29,24 +29,24 @@ class SettingsPage extends PolymerElement {
         color: #FFFFFF;
       }
 
-      input {
-        -moz-transform: scaleX(-1);
-        -o-transform: scaleX(-1);
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
-        filter: FlipH;
-        -ms-filter: "FlipH";
-      }
-
       main {
+        position: relative;
         margin: auto;
         max-width: 600px;
         padding: 8px;
         width: 100%;
+        height: 100%;        
+        overflow: scroll;
+
+      }
+
+      #grid-container {
+        margin-top: 64px;
         display: grid;
         grid-gap: 16px;
-        grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));        
-        grid-template-columns: 0.5fr 0.5fr;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+        margin-top: 0;
       }
 
       section {
@@ -56,17 +56,9 @@ class SettingsPage extends PolymerElement {
       }
 
       header {
-        padding-left: 8px;
-        line-height: 120px;
-        height: 120px;
-        margin: auto;
-        max-width: 600px;
+        padding-top: 5vh;
         width: 100%;
-        position: relative;
-      }      
-
-      header h1 {
-        margin: 0;
+        height: 120px;
       }
 
       @media screen and (min-device-width: 599px) {
@@ -76,22 +68,18 @@ class SettingsPage extends PolymerElement {
         main {
           padding: 0;
         }
-        header {
-          padding: 0;
+        #grid-container {
+          grid-template-columns: 0.5fr 0.5fr;
+          margin-top: 64px;
         }
         paper-slider {
           width: 80%;
         }
-
       }
 
-      paper-radio-button {
-        display: block;
-        --paper-radio-button-unchecked-background-color: #FFFFFF;
-        --paper-radio-button-unchecked-color: #FFFFFF;
-        --paper-radio-button-unchecked-ink-color: #FFFFFF;
-        --paper-radio-button-label-color: #FFFFFF;
-      } 
+      paper-button {
+        background-color: rgb(51, 51, 51);
+      }
 
       paper-item {
         color: black;
@@ -116,56 +104,112 @@ class SettingsPage extends PolymerElement {
           width: 70px; 
         }
         --paper-slider-input-container-input: {
-          background-color: darkgrey;
-          color: #FFFFFF;
+          background-color: #FFFFFF;
+          color: white;
         }
+      }
+
+      #header-h1 {
+        position: absolute;
+        left: 8%;
+        top: 8%;
+        margin: 0;    
       }
 
       paper-icon-button {
         position: absolute;
-        right: 4px;
-        top: 42px;
+        right: 8%;
+        top: 8%;
         color: #FFFFFF;
+      } 
+
+      paper-button {
+        z-index: 2;
+        margin: 8px 8px 8px 0;
       }
 
+      paper-button[data-raised] {
+        background-color: rgb(255, 0, 0);
+      }
+
+      paper-button:not([data-raised]) {
+        --paper-button {
+          background-color: #FFFFFF;
+        }
+      }
+
+      paper-button[disabled] {
+        color: grey;
+      }
     </style>
 
-    <header>
-      <h1>Settings</h1>
-      <paper-icon-button icon="ptg-icons:arrow-back" alt="settings" on-click="_switchPageIntend"></paper-icon-button>
-    </header>
-
     <main>
-      <section>
-        <h1>Tone type</h1>
+      <header>
+      </header>
 
-        <paper-radio-group selected="{{keyType}}" aria-labelledby="label2">
-          <paper-radio-button name="all">All</paper-radio-button>
-          <paper-radio-button name="sharps">Sharps only</paper-radio-button>
-          <paper-radio-button name="flats">Flats only</paper-radio-button>
-          <paper-radio-button name="whiteKeys">White keys only</paper-radio-button>
-        </paper-radio-group>
+      <div id="grid-container">
+        <h1 id="header-h1">Settings</h1>
+        <paper-icon-button 
+          icon="ptg-icons:arrow-back" 
+          alt="return-to-player-button" 
+          on-click="_switchPageIntend"
+        ></paper-icon-button>        
+        <section>
+          <h1>Tone type</h1>
 
-        <div>
-          <input type="checkbox" value="{{noSuccedentIdenticalNotes::change}}">
-          <span>No succesent identical tones</span>
-        </div>
-        
-      </section>
+          <paper-button 
+            icon="ptg-icons:flat-square"
+            data-raised$="{{flatsActive}}"
+            raised="{{flatsActive}}"
+            disabled="[[_computeButtonDisabled(whitesActive, sharpsActive, flatsActive, 'flatsActive')]]"
+            on-click="_toggleActive"
+            data-prop-name="flatsActive"
+          >
+            Flats ♭
+          </paper-button>
 
-      <section>
-        <h1># Bars before next tone</h1>
-        <paper-slider pin="" min="1" max="20" editable="" value="{{barsBeforeSwitch}}"></paper-slider>
-      </section>
+          <paper-button 
+            icon="ptg-icons:sharp-square"
+            data-raised$="{{sharpsActive}}"
+            raised="{{sharpsActive}}"
+            disabled="[[_computeButtonDisabled(whitesActive, sharpsActive, flatsActive, 'sharpsActive')]]"
+            on-click="_toggleActive"    
+            data-prop-name="sharpsActive"
+          >
+            Sharps ♯
+          </paper-button>
+          
+          <paper-button 
+            icon="ptg-icons:sharp-square"
+            data-raised$="{{whitesActive}}"
+            raised="{{whitesActive}}"
+            disabled="[[_computeButtonDisabled(whitesActive, sharpsActive, flatsActive, 'whitesActive')]]"
+            on-click="_toggleActive"
+            data-prop-name="whitesActive"
+          >
+            Whites
+          </paper-button>        
 
-      <section>
-        <h1>Volume</h1>
-        <div>
-          <span>Metronome volume</span>
-          <paper-slider pin="" min="0" max="100" value="{{metronomeVolume}}"></paper-slider>
-        </div>
-      </section>
+          <div>
+            <input type="checkbox" value="{{noSuccedentIdenticalNotes::change}}">
+            <span>No succesent identical tones</span>
+          </div>
+          
+        </section>
 
+        <section>
+          <h1>Bars before next tone</h1>
+          <paper-slider pin="" min="1" max="20" editable="" value="{{barsBeforeSwitch}}"></paper-slider>
+        </section>
+
+        <section>
+          <h1>Volume</h1>
+          <div>
+            <span>Metronome volume</span>
+            <paper-slider pin="" min="0" max="100" value="{{metronomeVolume}}"></paper-slider>
+          </div>
+        </section>
+      </div>
     </main>
 `;
   }
@@ -179,10 +223,6 @@ class SettingsPage extends PolymerElement {
    */
   static get properties() {
     return {
-      keyType: {
-        type: String,
-        notify: true
-      },
       metronomeVolume: {
         type: String,
         value: "40",
@@ -193,6 +233,21 @@ class SettingsPage extends PolymerElement {
         value: "0",
         notify: true
       },
+      flatsActive: {
+        type: Boolean,
+        value: true,
+        notify: true
+      },
+      sharpsActive: {
+        type: Boolean,
+        value: true,
+        notify: true
+      },
+      whitesActive: {
+        type: Boolean,
+        value: true,
+        notify: true
+      }, 
       barsBeforeSwitchOptions: {
         type: Array,
         value: function () {
@@ -211,7 +266,6 @@ class SettingsPage extends PolymerElement {
         type: Boolean,
         value: false,
         notify: true
-      }        
       },
       userInteracted: {
         type: Boolean,
@@ -229,8 +283,20 @@ class SettingsPage extends PolymerElement {
   _handleUserInteracted() {
     this.set('userInteracted', true)
   }
+
   _switchPageIntend() {
     this.dispatchEvent(new CustomEvent('switch-page-intend'));
+  }
+
+  _toggleActive(evt) {
+    var propName = evt.target.getAttribute('data-prop-name');
+    this.set(propName, !this[propName])
+  }
+
+  _computeButtonDisabled(whitesActive, sharpsActive, flatsActive, buttonToneType) {
+    var buttonsActive = [whitesActive, sharpsActive, flatsActive].filter(v => v).length;
+    if(buttonsActive <= 1 && this[buttonToneType] == true) return true;
+    return false;
   }
 }
 
