@@ -1,6 +1,8 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/utils/gestures.js';
 import '@polymer/paper-slider/paper-slider.js';
+import '@polymer/paper-button/paper-button.js';
+
 import './increment-stepper.js';
 import './ptg-image.js';
 import './toggle-button.js';
@@ -55,10 +57,6 @@ class PracticePage extends PolymerElement {
 
       header {
         margin-top: 5vh;
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        position: relative;
       }
 
       section {
@@ -106,6 +104,7 @@ class PracticePage extends PolymerElement {
       }
 
       increment-stepper {
+        display: inline-block;
         width: 60px;
         height: 120px;
         @apply --ptg-font-body-base;
@@ -119,7 +118,7 @@ class PracticePage extends PolymerElement {
         @apply --ptg-font-body-base;
         color: white;
         margin-left: 40px;
-        background-color: black;
+        background-color: rgb(51, 51, 51);
         border: 0.5px solid darkgrey;
         width: 60px;        
         height: 40px;
@@ -140,16 +139,6 @@ class PracticePage extends PolymerElement {
         height: 100%;
         position: relative;
       }
-
-      #signatureDash {
-        display: inline-block;
-        text-align: center;
-        line-height: 120px;
-        font-size: 36px;
-        margin: 0;
-        color: grey;
-      }      
-
 
       #circle  {
         height: 80%;
@@ -223,10 +212,20 @@ class PracticePage extends PolymerElement {
 
       toggle-icon {
         --toggle-icon-buttons: {
-          width: 60px;
-          height: 60px;
+          width: 44px;
+          height: 44px;
         }
-      }      
+      }    
+
+      #time-signure-button {
+        position: absolute;
+        left: 8%;
+        top: 8%;
+        z-index: 2;
+        background-color: rgb(51, 51, 51);
+        min-width: 23px;
+        height: 32px;
+      }
 
       @media screen and (min-device-width: 599px) {
         #current-tone {
@@ -252,6 +251,11 @@ class PracticePage extends PolymerElement {
             width: 50px;
             height: 50px;
           }
+        }
+ 
+        #time-signure-button {
+          min-width: 5.14em;
+          height: 58px;
         }        
       }
 
@@ -260,16 +264,9 @@ class PracticePage extends PolymerElement {
         cursor: pointer;
       }
 
-      #time-signure-button {
-        position: absolute;
-        left: 8%;
-        top: 8%;
-        z-index: 2;
-      }
-
       #repeat-button {
         position: absolute;
-        right: 20%;
+        right: 22%;
         bottom: 23%;
         z-index: 2;
       }
@@ -292,8 +289,8 @@ class PracticePage extends PolymerElement {
 
       #settings-button {
         position: absolute;
-        right: 10%;
-        top: 10%;
+        right: 8%;
+        top: 8%;
         color: #FFFFFF;
       }
 
@@ -304,8 +301,7 @@ class PracticePage extends PolymerElement {
     </style>
 
     <main>
-      <!-- <play-pause-button playing="{{runGenerator}}"></play-pause-button> -->
-
+      <header></header>    
       <toggle-icon 
         id="play-pause-button"
         icon="ptg-icons:play-arrow" 
@@ -314,9 +310,14 @@ class PracticePage extends PolymerElement {
         on-click="_toggleRunGenerator"
       ></toggle-icon>
 
-      <toggle-button id="time-signure-button" on-click="_handleShowOverlayAttempt">
-        <span slot="body">[[beat]] / [[measure]]</span>
-      </toggle-button>
+      <paper-button 
+        id="time-signure-button" 
+        toggles 
+        raised 
+        on-click="_handleShowOverlayAttempt"
+      >
+        [[beat]] / [[measure]]
+      </paper-button>
 
       <toggle-icon 
         id="repeat-button"
@@ -335,20 +336,20 @@ class PracticePage extends PolymerElement {
         rotation="360"
         on-click="_handleSkipCurrentToneAttempt"
       ></toggle-icon>
-      <paper-icon-button id="settings-button" icon="ptg-icons:settings" alt="settings" on-click="_switchPageIntend"></paper-icon-button>
+
+      <paper-icon-button 
+        id="settings-button" 
+        icon="ptg-icons:settings" 
+        alt="settings" 
+        on-click="_switchPageIntend"
+      ></paper-icon-button>
 
       <div id="time-signature-overlay" data-show-overlay\$="[[showOverlay]]">
         <div id="time-signature-overlay-content">
           <increment-stepper values="[[beats]]" selected-index="{{beatIndex}}" selected-value="{{beat}}"></increment-stepper>
-
-          <p id="signatureDash">/</p>
-
           <increment-stepper values="[[measures]]" selected-index="{{measureIndex}}" selected-value="{{measure}}"></increment-stepper>
         </div>
       </div>
-
-
-        <header></header>
 
       <section class="relative">
         <img src="../../images/circle.svg" id="circle" alt="">
