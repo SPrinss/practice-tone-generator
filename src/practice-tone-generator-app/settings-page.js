@@ -5,6 +5,7 @@ import '@polymer/paper-item/paper-item.js';
 // import '@polymer/neon-animation/web-animations.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-checkbox/paper-checkbox.js';
 
 import './ptg-icons.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -113,6 +114,11 @@ class SettingsPage extends PolymerElement {
         }
       }
 
+      paper-checkbox {
+        --primary-text-color: #FFFFFF;
+        --primary-color: rgb(255, 0, 0);
+      }
+
       #header-h1 {
         position: absolute;
         left: 8%;
@@ -194,10 +200,7 @@ class SettingsPage extends PolymerElement {
             Whites
           </paper-button>        
 
-          <div>
-            <input type="checkbox" value="{{noSuccedentIdenticalNotes::change}}">
-            <span>No succesent identical tones</span>
-          </div>
+          <paper-checkbox checked="{{noSuccedentIdenticalNotes}}">Prevent succesent identical tones</paper-checkbox>
           
         </section>
 
