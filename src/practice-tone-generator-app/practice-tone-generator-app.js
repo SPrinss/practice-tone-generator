@@ -43,9 +43,29 @@ class PracticeToneGeneratorApp extends PtgElement {
     </style>
 
     <iron-pages selected="[[selectedPage]]">
-      <practice-page beat="{{beat}}" measure="{{measure}}" user-interacted="{{userInteracted}}" run-generator="{{runGenerator}}" bpm="{{bpm}}" tone="[[tone]]" next-tone="[[nextTone]]" on-switch-page-intend="_switchPage" on-repeat-tone-intend="repeatCurrentTone" on-skip-current-tone-intend="skipCurrentTone"></practice-page>
+      <practice-page 
+        beat="{{beat}}" 
+        measure="{{measure}}" 
+        user-interacted="{{userInteracted}}" 
+        run-generator="{{runGenerator}}" 
+        bpm="{{bpm}}" tone="[[tone]]" 
+        next-tone="[[nextTone]]" 
+        on-switch-page-intend="_switchPage" 
+        on-repeat-tone-intend="repeatCurrentTone" 
+        on-skip-current-tone-intend="skipCurrentTone"
+      ></practice-page>
 
-      <settings-page key-type="{{keyType}}" metronome-volume="{{metronomeVolume}}" synth-volume="{{synthVolume}}" no-succedent-identical-notes="{{noSuccedentIdenticalNotes}}" bars-before-switch="{{barsBeforeSwitch}}" on-switch-page-intend="_switchPage"></settings-page>
+      <settings-page 
+        sharps-active="{{sharpsActive}}" 
+        whites-active="{{whitesActive}}" 
+        flats-active="{{flatsActive}}"
+        user-interacted="{{userInteracted}}"
+        metronome-volume="{{metronomeVolume}}" 
+        synth-volume="{{synthVolume}}" 
+        no-succedent-identical-notes="{{noSuccedentIdenticalNotes}}" 
+        bars-before-switch="{{barsBeforeSwitch}}" 
+        on-switch-page-intend="_switchPage"
+        ></settings-page>
     </iron-pages>
 `;
   }
