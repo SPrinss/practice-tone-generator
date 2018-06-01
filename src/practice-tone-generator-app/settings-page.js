@@ -99,12 +99,16 @@ class SettingsPage extends PolymerElement {
 
       paper-slider {
         width: 100%;
+        --paper-slider-active-color: rgb(255, 0, 0);
+        --paper-slider-knob-color: rgb(255, 0, 0);
+        --paper-slider-pin-color: rgb(255, 0, 0);
+        --paper-slider-knob-color: rgb(255, 0, 0);
         @apply --ptg-font-body-base;
         --paper-slider-input: {
           width: 70px; 
         }
         --paper-slider-input-container-input: {
-          background-color: #FFFFFF;
+          background-color: rgb(51, 51, 51);
           color: white;
         }
       }
