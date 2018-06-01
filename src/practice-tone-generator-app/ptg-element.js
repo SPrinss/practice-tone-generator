@@ -28,10 +28,6 @@ export class PtgElement extends PolymerElement {
       nextTone: {
         type: String
       },
-      keyType: {
-        type: String,
-        value: "all"
-      },
       beat: {
         type: String,
         observer: "_handleBeatChange"
@@ -42,7 +38,7 @@ export class PtgElement extends PolymerElement {
       },
       tones: {
         type: Array,
-        computed: "_computePossibleTones(keyType, whiteKeyTones.splices, flatTones.splices, sharpTones.splices)"
+        computed: "_computePossibleTones(whitesActive, sharpsActive, flatsActive, whiteKeyTones.splices, flatTones.splices, sharpTones.splices)"
       },
       whiteKeyTones: {
         type: Array,
@@ -62,7 +58,19 @@ export class PtgElement extends PolymerElement {
         value: function () {
           return ['C#', 'D#', 'F#', 'G#', 'A#']
         }
-      }, 
+      },
+      flatsActive: {
+        type: Boolean,
+        value: true,
+      },
+      sharpsActive: {
+        type: Boolean,
+        value: true,
+      },
+      whitesActive: {
+        type: Boolean,
+        value: true,
+      },       
       barsBeforeSwitch: {
         type: String,
         observer: "_handleBarsBeforeSwitchChanged"
@@ -129,7 +137,7 @@ export class PtgElement extends PolymerElement {
 
   static get observers() {
     return [
-      '_computeTranportReady(keyType, measure, beat, _toneLibraryLoaded)',
+      '_computeTranportReady( measure, beat, _toneLibraryLoaded)',
     ]
   }
 
@@ -168,8 +176,8 @@ export class PtgElement extends PolymerElement {
     this.set('nextTone', nextTone)
   }
 
- _computeTranportReady(keyType, measure, beat, _toneLibraryLoaded) {
-    if(!keyType || !measure || !beat || this._transportStarted == true || _toneLibraryLoaded == false) return;
+ _computeTranportReady(measure, beat, _toneLibraryLoaded) {
+    if(!measure || !beat || this._transportStarted == true || _toneLibraryLoaded == false) return;
     this.set('_transportReady', true)
  }
 
@@ -226,6 +234,7 @@ export class PtgElement extends PolymerElement {
   _handleBeatChange(beat, oldBeat) {
     if(beat == oldBeat || typeof oldBeat == 'undefined') return;
     this._stop();
+    this._setTimeSignature();
 
     window.setTimeout((function() {
       this._start()
@@ -243,6 +252,7 @@ export class PtgElement extends PolymerElement {
   }
 
   _setTimeSignature() {
+    if(typeof Tone === "undefined") return;
     Tone.Transport.timeSignature = [this.beat, this.measure];
   }
 
@@ -296,21 +306,12 @@ export class PtgElement extends PolymerElement {
     }.bind(this)), 300)
   }
 
-  _computePossibleTones(keyType, whiteKeyTonesSplices, flatTonesSplices, sharpTonesSplices) {
+  _computePossibleTones(whitesActive, sharpsActive, flatsActive, whiteKeyTonesSplices, flatTonesSplices, sharpTonesSplices) {
     var tones = [];
-    switch(keyType) {
-        case 'sharps':
-            tones = tones.concat(this.sharpTones);
-            break;
-        case 'whiteKeys':
-            tones = tones.concat(this.whiteKeyTones);
-            break;
-        case 'flats':
-            tones = tones.concat(this.flatTones);
-            break;                
-        default:
-            tones = tones.concat(this.flatTones,this.whiteKeyTones,this.sharpTones);
-    }
+    if(whitesActive) tones = tones.concat(this.whiteTones);
+    if(sharpsActive) tones = tones.concat(this.sharpTones);
+    if(flatsActive) tones = tones.concat(this.flatTones);
+
     return tones;
   }      
 
