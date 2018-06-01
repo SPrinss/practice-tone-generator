@@ -293,7 +293,7 @@ export class PtgElement extends PolymerElement {
     if(_player.stop) _player.stop();
 
     Tone.Transport.stop();
-		  }
+  }
   
   _handleBpmChanged(bpm) {
     if(typeof Tone === "undefined") return;
@@ -308,7 +308,7 @@ export class PtgElement extends PolymerElement {
 
   _computePossibleTones(whitesActive, sharpsActive, flatsActive, whiteKeyTonesSplices, flatTonesSplices, sharpTonesSplices) {
     var tones = [];
-    if(whitesActive) tones = tones.concat(this.whiteTones);
+    if(whitesActive) tones = tones.concat(this.whiteKeyTones);
     if(sharpsActive) tones = tones.concat(this.sharpTones);
     if(flatsActive) tones = tones.concat(this.flatTones);
 
