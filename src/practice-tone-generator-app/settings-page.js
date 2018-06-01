@@ -212,9 +212,23 @@ class SettingsPage extends PolymerElement {
         value: false,
         notify: true
       }        
+      },
+      userInteracted: {
+        type: Boolean,
+        value: false,
+        notify: true
+      }      
     };
   }
 
+  ready() {
+    super.ready()
+    this.addEventListener('click', e => this._handleUserInteracted());
+  }
+
+  _handleUserInteracted() {
+    this.set('userInteracted', true)
+  }
   _switchPageIntend() {
     this.dispatchEvent(new CustomEvent('switch-page-intend'));
   }

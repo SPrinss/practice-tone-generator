@@ -431,6 +431,15 @@ class PracticePage extends PolymerElement {
     };
   }
 
+  ready() {
+    super.ready()
+    this.addEventListener('click', e => this._handleUserInteracted());
+  }
+
+  _handleUserInteracted() {
+    this.set('userInteracted', true)
+  }
+
   _computeImgPath(toneWithOctave) {
     // Cut off octave Number and replace # with sharp (since Filepaths don't like #)
     var tone = toneWithOctave.substring(0, toneWithOctave.length -1).replace("#", "sharp");
@@ -438,9 +447,8 @@ class PracticePage extends PolymerElement {
   }
 
   _toggleRunGenerator() {
-    var context = new AudioContext();
-
-    this.set('userInteracted', true)
+    if(this.userInteracted) return this.set('runGenerator', !this.runGenerator);
+    
     window.setTimeout((function () {
       this.set('runGenerator', !this.runGenerator)
     }.bind(this)), 500)
