@@ -165,7 +165,7 @@ class SettingsPage extends PolymerElement {
           on-click="_switchPageIntend"
         ></paper-icon-button>        
         <section>
-          <h1>Tone type</h1>
+          <h1>Keys</h1>
 
           <paper-button 
             icon="ptg-icons:flat-square"
@@ -197,15 +197,15 @@ class SettingsPage extends PolymerElement {
             on-click="_toggleActive"
             data-prop-name="whitesActive"
           >
-            Whites
+            White keys
           </paper-button>        
 
-          <paper-checkbox checked="{{noSuccedentIdenticalNotes}}">Prevent succesent identical tones</paper-checkbox>
+          <paper-checkbox checked="{{noSuccedentIdenticalNotes}}">Prevent doubles</paper-checkbox>
           
         </section>
 
         <section>
-          <h1>Bars before next tone</h1>
+          <h1># bars</h1>
           <paper-slider pin="" min="1" max="20" editable="" value="{{barsBeforeSwitch}}"></paper-slider>
         </section>
 
