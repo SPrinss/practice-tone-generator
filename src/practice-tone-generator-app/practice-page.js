@@ -31,7 +31,7 @@ class PracticePage extends PolymerElement {
         margin: auto;
         padding: var(--main-vertical-padding, 5vh) 0;
         height: 100%;
-        max-width: var(--max-width);
+        max-width: var(--max-width, 600px);
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -106,7 +106,7 @@ class PracticePage extends PolymerElement {
 
       /* USER INPUT ELEMENTS */
       increment-stepper {
-        @apply --ptg-font-body-base;
+        @apply --ptg-font-body;
         display: inline-block;
         width: 100%;
         height: 120px;        
@@ -129,7 +129,7 @@ class PracticePage extends PolymerElement {
 
       #bpm-input {
         position: absolute;
-        @apply --ptg-font-body-base;
+        @apply --ptg-font-body;
         color: white;
         left: var(--first-horizontal-positioned-item-position, 8%);
         bottom: var(--second-vertical-positioned-item-position, 22%);

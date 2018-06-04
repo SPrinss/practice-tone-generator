@@ -1,7 +1,6 @@
 import {PwaStatus} from './pwa-status.js';
+import './shared-styles.js';
 import '@polymer/paper-slider/paper-slider.js';
-import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-import '@polymer/paper-item/paper-item.js';
 // import '@polymer/neon-animation/web-animations.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-button/paper-button.js';
@@ -21,136 +20,118 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class SettingsPage extends PwaStatus {
   static get template() {
     return html`
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
-      }
-
-      * {
-        box-sizing: border-box;
-        color: #FFFFFF;
       }
 
       main {
         position: relative;
         margin: auto;
-        max-width: 600px;
-        padding: 8px;
+        max-width: var(--max-width, 600px);
+        padding: var(--main-vertical-padding, 5vh) 0;
         width: 100%;
         height: 100%;        
         overflow: scroll;
-
       }
 
       #grid-container {
-        margin-top: 64px;
+        margin-top: calc(var(--first-vertical-positioned-item-position) * 3);
         display: grid;
         grid-gap: 16px;
-        grid-template-columns: 1fr;
         grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
-        margin-top: 0;
+        grid-template-columns: 0.5fr 0.5fr;
       }
 
       section {
-        border: 1px solid darkgrey;
+        border: 1px solid var(--border-color, darkgrey);
         border-radius: 5%;
-        padding: 12px;
-      }
-
-      header {
-        padding-top: 5vh;
-        width: 100%;
-        height: 120px;
-      }
-
-      @media screen and (min-device-width: 599px) {
-        section {
-          padding: 24px;
-        }
-        main {
-          padding: 0;
-        }
-        #grid-container {
-          grid-template-columns: 0.5fr 0.5fr;
-          margin-top: 64px;
-        }
-        paper-slider {
-          width: 80%;
-        }
-      }
-
-      paper-button {
-        background-color: rgb(51, 51, 51);
-      }
-
-      paper-item {
-        color: black;
-      }
-
-      paper-dropdown-menu {
-        --paper-dropdown-menu-input: {
-          color: #FFFFFF;
-        }
-        --paper-input-container-input: {
-          color: #FFFFFF;
-          font-style: normal;
-          font-family: serif;
-          text-transform: uppercase;
-        };
+        padding: 24px;
       }
 
       paper-slider {
-        width: 100%;
-        --paper-slider-active-color: rgb(255, 0, 0);
-        --paper-slider-knob-color: rgb(255, 0, 0);
-        --paper-slider-pin-color: rgb(255, 0, 0);
-        --paper-slider-knob-color: rgb(255, 0, 0);
-        @apply --ptg-font-body-base;
+        width: 80%;
+        margin-left: -16px;
+
+        --paper-slider-active-color: var(--support-color-bright, rgb(255, 0, 0));
+        --paper-slider-knob-color: var(--support-color-bright, rgb(255, 0, 0));
+        --paper-slider-pin-color: var(--support-color-bright, rgb(255, 0, 0));
+        --paper-slider-knob-color: var(--support-color-bright, rgb(255, 0, 0));
+        @apply --ptg-font-body;
         --paper-slider-input: {
           width: 70px; 
         }
         --paper-slider-input-container-input: {
-          background-color: rgb(51, 51, 51);
+          background-color: var(--background-color, rgb(51, 51, 51));
           color: white;
         }
       }
 
+      paper-button {
+        background-color: var(--background-color-bright, rgb(51, 51, 51));
+      }
+
       paper-checkbox {
-        --primary-text-color: #FFFFFF;
-        --primary-color: rgb(255, 0, 0);
+        --primary-text-color: var(--text-color, #FFFFFF);
+        --primary-color: var(--support-color-bright, rgb(255, 0, 0));
+        @apply --ptg-font-body;
+      }
+
+      h1 {
+        @apply --ptg-font-h1;
       }
 
       #header-h1 {
         position: absolute;
-        left: 8%;
-        top: 8%;
-        margin: 0;    
+        left: var(--first-horizontal-positioned-item-position, 8%);
+        top: var(--first-vertical-positioned-item-position, 8%);
+        font-size: calc(var(--ptg-font-h1-size, 32px) * 1.35);
+        margin: 0;
       }
+
 
       paper-icon-button {
         position: absolute;
-        right: 8%;
-        top: 8%;
-        color: #FFFFFF;
+        right: var(--first-horizontal-positioned-item-position, 8%);
+        top: var(--first-vertical-positioned-item-position, 8%);
+        color: var(--text-color, #FFFFFF);
+        @apply --ptg-font-body;
+
       } 
 
       paper-button {
         z-index: 2;
+        @apply --ptg-font-body;
         margin: 8px 8px 8px 0;
       }
 
       paper-button[data-raised] {
-        background-color: rgb(255, 0, 0);
+        background-color: var(--support-color-bright, rgb(255, 0, 0));
       }
 
       paper-button:not([data-raised]) {
         --paper-button {
-          background-color: #FFFFFF;
+          background-color: var(--text-color, #FFFFFF);
         }
       }
 
       paper-button[disabled] {
         color: grey;
+      }
+
+      @media screen and (max-device-width: 840px) {
+        section {
+          padding: 12px;
+        }
+        main {
+          padding: 8px;
+        }
+        #grid-container {
+          grid-template-columns: 1fr;
+        }
+        paper-slider {
+          width: 100%;
+        }
       }
 
       [hidden] {
@@ -159,9 +140,6 @@ class SettingsPage extends PwaStatus {
     </style>
 
     <main>
-      <header>
-      </header>
-
       <div id="grid-container">
         <h1 id="header-h1">Settings</h1>
         <paper-icon-button 

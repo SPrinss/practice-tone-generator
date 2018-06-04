@@ -13,7 +13,6 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         --header-footer-height: 120px;
         --header-footer-margin: 5vh;
         --overlay-color: rgba(255, 0, 0, .95);
-        --ptg-font-body-base: {};
           
         /* Unfortunately, can't use variables to set linear gradient % yet; change main linear gradient percentages if you change this value */
         --middle-bar-half-width: 15%;
@@ -21,6 +20,8 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         --background-color-bright: rgba(51, 51, 51, 1);
         --support-color: rgba(255, 0, 0, .5);
         --support-color-bright: rgba(255, 0, 0, 1);
+        --text-color: #FFFFFF;
+        --border-color: darkgrey;
         --first-horizontal-positioned-item-position: 8%;
         --second-horizontal-positioned-item-position: 22%;
         --first-vertical-positioned-item-position: 10%;
@@ -30,7 +31,11 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
       * {
         box-sizing: border-box;
         color: white;
-      }      
+      }
+
+      p, span {
+        @apply --ptg-font-body;
+      }
       
       .absolute {
         position: absolute;
@@ -86,6 +91,46 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         -ms-transform:translate(-50%, -50%);
         -o-transform:translate(-50%, -50%);
         transform:translate(-50%, -50%);
+      }
+
+      :host {
+        --ptg-main-font-family: 'Lora', Georgia,Cambria,'Times New Roman',Times,serif;
+        --ptg-main-font-weight: 400;
+        --ptg-main-line-height: 1.5;
+
+        --ptg-headline-font-family: 'proxima-nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        --ptg-headline-font-weight: 700;
+        --ptg-headline-line-height: 1;
+        --ptg-font-h1-size: 32px;
+        --ptg-font-body-size: 16px;
+
+        /*
+        font styles
+        */
+        --ptg-font-base: {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          text-rendering: optimizeLegibility;
+          margin-top: 0;
+          margin-bottom: 0;
+        };
+
+        --ptg-font-h1: {
+          @apply --ptg-font-base;
+          font-family: var(--ptg-headline-font-family);
+          font-weight: var(--ptg-headline-font-weight);
+          line-height: var(--ptg-headline-line-height);
+          margin: 14px 0;
+          font-size: var(--ptg-font-h1-size);
+        }
+        
+        --ptg-font-body: {
+          @apply --ptg-font-base;
+          font-family: var(--ptg-main-font-family);
+          font-weight: var(--ptg-main-font-weight);
+          line-height: var(--ptg-main-line-height);
+          font-size: var(--ptg-font-body-size);
+        }
       }
     </style>
   </template>
