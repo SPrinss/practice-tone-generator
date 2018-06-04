@@ -1,4 +1,5 @@
 import {PtgElement} from './ptg-element.js';
+import './shared-styles.js';
 import '../../node_modules/@polymer/iron-pages/iron-pages.js';
 import './practice-page.js';
 import './settings-page.js';
@@ -10,7 +11,7 @@ import { html } from '../../node_modules/@polymer/polymer/lib/utils/html-tag.js'
 class PracticeToneGeneratorApp extends PtgElement {
   static get template() {
     return html`
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
         position: fixed;
@@ -27,7 +28,8 @@ class PracticeToneGeneratorApp extends PtgElement {
           font-kerning: normal;
           -webkit-font-smoothing: antialiased;
         };
-        background-color: rgb(51, 51, 51);
+
+        background-color: var(--background-color-bright,rgb(51, 51, 51));
       }
       * {
         box-sizing: border-box;
