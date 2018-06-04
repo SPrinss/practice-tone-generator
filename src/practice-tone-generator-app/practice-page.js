@@ -1,4 +1,5 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import './shared-styles.js';
 import '@polymer/polymer/lib/utils/gestures.js';
 import '@polymer/paper-slider/paper-slider.js';
 import '@polymer/paper-button/paper-button.js';
@@ -19,84 +20,214 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class PracticePage extends PolymerElement {
   static get template() {
     return html`
-    <style>
-      :host {
+    <style include="shared-styles">
+    :host {
         display: block;
-        --max-width: 600px;
-        --bar-height: 40px;
-        --tone-size: 80px;
-        --next-tone-width: 23px;
       }
-      * {
-        box-sizing: border-box;
-        color: white;
-      }
+
+      /* MAIN ELEMENTS */
       main {
         position: relative;
         margin: auto;
+        padding: var(--main-vertical-padding, 5vh) 0;
         height: 100%;
         max-width: var(--max-width);
         width: 100%;
         display: flex;
         flex-direction: column;
+        
+        /* Update these values if you change --middle-bar-half-width css variable. */
         background: linear-gradient(
           to top right
-          , rgba(51, 51, 51, .5) 0%
-          , rgba(51, 51, 51, .5) 35%
-          , rgba(255, 0, 0, .5) 35%
-          , rgba(255, 0, 0, .5) 65%
-          , rgba(51, 51, 51, .5) 65%
-          , rgba(51, 51, 51, .5) 100% 
+          , var(--background-color, rgba(51, 51, 51, .5)) 0%
+          , var(--background-color, rgba(51, 51, 51, .5)) 35%
+          , var(--support-color, rgba(255, 0, 0, .5)) 35%
+          , var(--support-color, rgba(255, 0, 0, .5)) 65%
+          , var(--background-color, rgba(51, 51, 51, .5)) 65%
+          , var(--background-color, rgba(51, 51, 51, .5)) 100% 
         );
-      }
-
-      header, footer {
-        width: 100%;
-        height: 120px;
-      }      
-
-      header {
-        margin-top: 5vh;
       }
 
       section {
         width: 100%; 
         margin: auto;
-        flex: 1;
       }
 
-      footer {
-        margin-bottom: 5vh;
-        position: relative;
-        display: flex;
-        max-width: 60%;
-        justify-content: flex-start;
-        flex-direction: row;
-        flex-wrap: wrap;
+      /* IMAGES */
+      #circle  {
+        height: 80%;
+        max-height: calc(var(--max-width) - 60px);
+        z-index: 1;
       }
 
+      #current-tone {
+        height: calc(var(--tone-size) - 4px);
+        width: var(--tone-size);
+        z-index: 2;
+      }
+
+      #next-tone {
+        right: 14px;
+        width: var(--next-tone-width);
+        height: calc(var(--bar-height) + 14px);  
+        top: calc(50% - var(--next-tone-width));
+        z-index: 2; 
+      }
+
+      @media screen and (max-device-width: 840px) and (orientation: landscape) {
+        #circle  {
+          height: 70vh 
+        }
+        #current-tone {
+          height: calc(var(--tone-size) / 1.5);
+          width: calc(var(--tone-size) / 1.5);
+        }
+        #next-tone {
+          width: calc(var(--next-tone-width) / 1.5);
+          height: calc(calc(var(--bar-height)-4px));   
+          top: calc(50% - var(--next-tone-width));
+        }
+      }
+
+      @media screen and (max-device-width: 840px) and (orientation: portrait) {
+        #circle  {
+          height: 40%; 
+        }
+        #current-tone {
+          height: calc(var(--tone-size) / 1.5);
+          width: calc(var(--tone-size) / 1.5);
+        }
+        #next-tone {
+          width: calc(var(--next-tone-width) / 1.5);
+          height: calc(calc(var(--bar-height)-4px) / 1.5);   
+          top: 48%;
+        }   
+      }
+
+      /* USER INPUT ELEMENTS */
+      increment-stepper {
+        @apply --ptg-font-body-base;
+        display: inline-block;
+        width: 100%;
+        height: 120px;        
+        --hr-margin: 5px;
+        margin: 46px 0;
+      }
+      
+      paper-slider {
+        position: absolute;
+
+        /* Can't style the padding of the slider container, subtract 16px instead */
+        left: calc(var(--first-horizontal-positioned-item-position, 8%) - 16px);
+        bottom: var(--first-vertical-positioned-item-position, 12%);
+        max-width: 45%;
+        --paper-slider-active-color: var(--support-color-bright, rgb(255, 0, 0));
+        --paper-slider-knob-color: var(--support-color-bright, rgb(255, 0, 0));
+        --paper-slider-pin-color: var(--support-color-bright, rgb(255, 0, 0));
+        --paper-slider-knob-color: var(--support-color-bright, rgb(255, 0, 0));
+      }
+
+      #bpm-input {
+        position: absolute;
+        @apply --ptg-font-body-base;
+        color: white;
+        left: var(--first-horizontal-positioned-item-position, 8%);
+        bottom: var(--second-vertical-positioned-item-position, 22%);
+        background-color: var(--background-color-bright, rgb(51, 51, 51));
+        width: 60px;
+        height: 40px;
+        text-align:center;
+      }
+
+      #time-signure-button {
+        background-color: var(--background-color-bright, rgb(51, 51, 51));
+        min-width: 5.14em;
+        height: 58px;
+      }      
+
+      toggle-icon {
+        --toggle-icon-buttons: {
+          width: 50px;
+          height: 50px;
+        }
+      }
+
+      @media screen and (max-device-width: 840px) {
+        increment-stepper {
+          margin: 16px 0;
+          --hr-margin: 2px;
+        }
+
+        toggle-icon {
+          --toggle-icon-buttons: {
+            width: 44px;
+            height: 44px;
+          }
+        }
+
+        #time-signure-button {
+          min-width: 23px;
+          height: 32px;
+        }        
+      }
+
+      /* OTHER VISUAL ELEMENTS */
+      #bar-right {
+        display: block;
+        background-color: #FFFFFF;
+        z-index: 1;
+        position: absolute;
+        padding: 0;
+        margin: 0;
+        right: 0;
+        top: calc(50% - calc(var(--bar-height)/2));
+        width: 50%;
+        height: calc(var(--bar-height) * 1.5);
+      }
+
+      #next-text {
+        display: block;
+        z-index: 1;
+        right: 0;
+        top: calc(50% - calc(var(--bar-height) * 1.5));
+        height: calc(calc(var(--bar-height)*1.5)/2);
+        width: 80px;        
+      }      
+
+      @media screen and (max-device-width: 840px) {
+        #bar-right {
+          height: var(--bar-height);
+        }
+
+        #next-text {
+          top: calc(50% - calc(var(--bar-height)*1.2));
+          height: calc(var(--bar-height)/2);
+        }
+
+        #next-text {
+          top: calc(50% - calc(var(--bar-height)*1.2));
+          height: calc(var(--bar-height)/2);
+        }        
+      }
+
+      /* TIME SIGNUTURE OVERLAY */
       #time-signature-overlay {
         position: absolute;
-        top: 200%;
         bottom: 0;
         left: 0;
         right: 0;
-        background-color:  rgba(255, 0, 0, .95);
-        z-index: 0;
+        background-color:  var(--overlay-color, rgba(255, 0, 0, .95));
         transition: 0.7s;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        margin: auto;
       }
 
       #time-signature-overlay[data-show-overlay] {
         top: 50%;
-        z-index: 5;
+        z-index: 3;
       }
 
       #time-signature-overlay:not([data-show-overlay]) {
         top: 200%;
+        z-index: 0;
       }
 
       #time-signature-overlay-content {
@@ -107,230 +238,23 @@ class PracticePage extends PolymerElement {
         justify-content: center;
         background: linear-gradient(
           to top
-          , rgba(51, 51, 51, .5) 0%
-          , rgba(51, 51, 51, .5) 48%
-          , rgba(255, 0, 0, .5) 48%
-          , rgba(255, 0, 0, .5) 53%
-          , rgba(51, 51, 51, .5) 53%
-          , rgba(51, 51, 51, .5) 100% 
+          , var(--background-color, rgba(51, 51, 51, .5)) 0%
+          , var(--background-color, rgba(51, 51, 51, .5)) 48%
+          , var(--support-color, rgba(255, 0, 0, .5)) 48%
+          , var(--support-color, rgba(255, 0, 0, .5)) 53%
+          , var(--background-color, rgba(51, 51, 51, .5)) 53%
+          , var(--background-color, rgba(51, 51, 51, .5)) 100% 
         );
-      }
-
-      increment-stepper {
-        display: inline-block;
-        width: 100%;
-        height: 120px;
-        margin: 16px 0;
-        @apply --ptg-font-body-base;
-        --hr-margin: 2px;
-      }
-
-      
-      paper-slider {
-        width: 100%;
-        --paper-slider-active-color: rgb(255, 0, 0);
-        --paper-slider-knob-color: rgb(255, 0, 0);
-        --paper-slider-pin-color: rgb(255, 0, 0);
-        --paper-slider-knob-color: rgb(255, 0, 0);
-      }
-
-      #bpm-input {
-        @apply --ptg-font-body-base;
-        color: white;
-        margin-left: 40px;
-        background-color: rgb(51, 51, 51);
-        border: 0.5px solid darkgrey;
-        width: 60px;        
-        height: 40px;
-        text-align:center;
-      }
-
-      }
-
-      footer span {
-        line-height: 118px;
-      }
-
-      .flex-end {
-        justify-content: flex-end;
-      }
-
-      .relative {
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
-
-      #circle  {
-        height: 80%;
-        max-height: calc(var(--max-width) - 60px);
-        /* width: var(--tone-size); */
-        z-index: 1;
-        position: absolute;
-        padding: 0;
-        margin: 0;
-        left: 50%;
-        top: 50%;
-        -webkit-transform:translate(-50%, -50%);
-        -moz-transform:translate(-50%, -50%);
-        -ms-transform:translate(-50%, -50%);
-        -o-transform:translate(-50%, -50%);
-        transform:translate(-50%, -50%);
-      }
-
-      #current-tone {
-        height: calc(var(--tone-size) - 4px);
-        width: var(--tone-size);
-        z-index: 2;
-        position: absolute;
-        padding: 0;
-        margin: 0;
-        left: 50%;
-        top: 50%;
-        -webkit-transform:translate(-50%, -50%);
-        -moz-transform:translate(-50%, -50%);
-        -ms-transform:translate(-50%, -50%);
-        -o-transform:translate(-50%, -50%);
-        transform:translate(-50%, -50%);
-      }
-
-      #next-tone {
-        position: absolute;
-        padding: 0;
-        margin: 0;
-        right: 14px;
-        width: var(--next-tone-width);
-        height: 50px;
-        height: calc(var(--bar-height) - 4px);  
-        top: calc(50% - var(--next-tone-width));
-        z-index: 2; 
-      }
-
-      #next-text {
-        display: block;
-        z-index: 1;
-        position: absolute;
-        padding: 0;
-        margin: 0;
-        right: 0;
-        top: calc(50% - calc(var(--bar-height)*1.2));
-        height: calc(var(--bar-height)/2);
-        width: 80px;        
-      }
-
-      #bar-right {
-        display: block;
-        background-color: #FFFFFF;
-        z-index: 1;
-        position: absolute;
-        padding: 0;
-        margin: 0;
-        right: 0;
-        top: calc(50% - calc(var(--bar-height)/2));
-        height: var(--bar-height);
-        width: 50%;
-      }
-
-      toggle-icon {
-        --toggle-icon-buttons: {
-          width: 44px;
-          height: 44px;
-        }
-      }    
-
-      #time-signure-button {
-        position: absolute;
-        left: 8%;
-        top: 8%;
-        z-index: 2;
-        background-color: rgb(51, 51, 51);
-        min-width: 23px;
-        height: 32px;
-      }
-
-      @media screen and (min-device-width: 599px) {
-        #current-tone {
-          height: calc(var(--tone-size) * 1.5);
-          width: calc(var(--tone-size) * 1.5);
-        }
-        #bar-right {
-          height: calc(var(--bar-height) * 1.5);
-        }
-
-        #next-text {
-          top: calc(50% - calc(var(--bar-height) * 1.5));
-          height: calc(calc(var(--bar-height)*1.5)/2);
-        }
-        #next-tone {
-          width: calc(var(--next-tone-width) * 1.5);
-          height: calc(calc(var(--bar-height)-4px) * 1.5);   
-          top: calc(50% -4px);
-        }        
-
-        toggle-icon {
-          --toggle-icon-buttons: {
-            width: 50px;
-            height: 50px;
-          }
-        }
- 
-        #time-signure-button {
-          min-width: 5.14em;
-          height: 58px;
-        }      
-        
-        increment-stepper {
-          --hr-margin: 5px;
-          margin: 46px 0;
-
-        }
-      }
-
-      paper-icon-button {
-        z-index: 2;
-        cursor: pointer;
-      }
-
-      #repeat-button {
-        position: absolute;
-        right: 22%;
-        bottom: 23%;
-        z-index: 2;
-      }
-
-      #next-button {
-        position: absolute;
-        right: 8%;
-        bottom: 10%;
-        z-index: 2;        
-      }      
-
-      #play-pause-button {
-        /* width: 44px; */
-        stroke: white;
-        position: absolute;
-        left: 22%;
-        top: 22%;
-        z-index: 2;
-      }
-
-      #settings-button {
-        position: absolute;
-        right: 8%;
-        top: 8%;
-        color: #FFFFFF;
       }
 
       [hidden] {
         display: none;
       }
-
     </style>
 
     <main>
-      <header></header>    
       <toggle-icon 
-        id="play-pause-button"
+        class="absolute second-top second-left ptg-button"
         icon="ptg-icons:play-arrow" 
         icon-checked="ptg-icons:pause" 
         alt="repeat-button"
@@ -338,6 +262,7 @@ class PracticePage extends PolymerElement {
       ></toggle-icon>
 
       <paper-button 
+        class="absolute first-top first-left ptg-button"
         id="time-signure-button" 
         toggles 
         raised 
@@ -348,6 +273,7 @@ class PracticePage extends PolymerElement {
 
       <toggle-icon 
         id="repeat-button"
+        class="absolute second-bottom second-right ptg-button"
         icon="ptg-icons:repeat" 
         alt="repeat-button" 
         animation="rotate" 
@@ -356,7 +282,7 @@ class PracticePage extends PolymerElement {
       ></toggle-icon>
       
       <toggle-icon 
-        id="next-button"
+        class="absolute first-bottom first-right ptg-button"
         icon="ptg-icons:skip-next" 
         alt="next-button" 
         animation="rotate" 
@@ -365,9 +291,9 @@ class PracticePage extends PolymerElement {
       ></toggle-icon>
 
       <paper-icon-button 
-        id="settings-button" 
+        class="absolute first-top first-right ptg-button"
         icon="ptg-icons:settings" 
-        alt="settings" 
+        alt="settings-button" 
         on-click="_switchPageIntend"
       ></paper-icon-button>
 
@@ -379,18 +305,16 @@ class PracticePage extends PolymerElement {
       </div>
 
       <section class="relative">
-        <img src="../../images/circle.svg" id="circle" alt="">
-        <ptg-image id="current-tone" hidden\$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
-        <ptg-image id="next-tone" hidden\$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
-        <ptg-image id="next-text" hidden\$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
-          
+        <img class="image center" src="../../images/circle.svg" id="circle" alt="">
+        <ptg-image class="image center" id="current-tone" hidden$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
+        <ptg-image class="image absolute" id="next-tone" hidden$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
+        <ptg-image class="image absolute" id="next-text" hidden$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
+
         <div id="bar-right"></div>
       </section>
 
-      <footer>
-        <input id="bpm-input" min="30" max="200" type="number" value="{{bpm::change}}">
-        <paper-slider pin="" min="30" max="200" value="{{bpm}}"></paper-slider>
-      </footer>
+      <input id="bpm-input" min="30" max="200" type="number" value="{{bpm::change}}">
+      <paper-slider pin="" min="30" max="200" value="{{bpm}}"></paper-slider>
     </main>
 `;
   }
@@ -416,6 +340,7 @@ class PracticePage extends PolymerElement {
         type: Number,
         value: 3
       },
+
       beat: {
         type: String,
         value: "4",
