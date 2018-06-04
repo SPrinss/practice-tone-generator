@@ -240,12 +240,23 @@ class PracticePage extends PolymerElement {
         background: linear-gradient(
           to top
           , var(--background-color, rgba(51, 51, 51, .5)) 0%
-          , var(--background-color, rgba(51, 51, 51, .5)) 48%
-          , var(--support-color, rgba(255, 0, 0, .5)) 48%
-          , var(--support-color, rgba(255, 0, 0, .5)) 53%
-          , var(--background-color, rgba(51, 51, 51, .5)) 53%
+          , var(--background-color, rgba(51, 51, 51, .5)) 49%
+          , var(--support-color, rgba(255, 0, 0, .5)) 49%
+          , var(--support-color, rgba(255, 0, 0, .5)) 51%
+          , var(--background-color, rgba(51, 51, 51, .5)) 51%
           , var(--background-color, rgba(51, 51, 51, .5)) 100% 
         );
+      }
+
+      #time-signatur-close-bar {
+        height: 28px;
+        width: 100%;
+        text-align: center;
+        color: var(--text-color, rgba(255, 255, 255, 1));
+        line-height: 28px;
+        background-color: rgba(51, 51, 51, .8);
+        box-shadow: 0px 3px rgba(51, 51, 51, .4);
+        cursor: pointer;
       }
 
       [hidden] {
@@ -267,7 +278,7 @@ class PracticePage extends PolymerElement {
         id="time-signure-button" 
         toggles 
         raised 
-        on-click="_handleShowOverlayAttempt"
+        on-click="toggleOverlayVisibility"
       >
         [[beat]] / [[measure]]
       </paper-button>
@@ -299,6 +310,7 @@ class PracticePage extends PolymerElement {
       ></paper-icon-button>
 
       <div id="time-signature-overlay" data-show-overlay\$="[[showOverlay]]">
+        <div id="time-signatur-close-bar" on-click="toggleOverlayVisibility"> Close </div>
         <div id="time-signature-overlay-content">
           <increment-stepper id="beat-stepper" values="[[beats]]" selected-index="{{beatIndex}}" selected-value="{{beat}}"></increment-stepper>
           <increment-stepper id="measure-stepper" values="[[measures]]" selected-index="{{measureIndex}}" selected-value="{{measure}}"></increment-stepper>
@@ -421,8 +433,7 @@ class PracticePage extends PolymerElement {
     this.dispatchEvent(new CustomEvent('skip-current-tone-intend'));
   }
 
-  _handleShowOverlayAttempt() {
-    console.log(!this.showOverlay)
+  toggleOverlayVisibility() {
     this.set('showOverlay', !this.showOverlay)
   }
 
