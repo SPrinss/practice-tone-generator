@@ -24,14 +24,20 @@ class IncrementSteper extends PolymerElement {
         text-align: center;
       }
 
-      i[disabled] {
-        border-color: grey;
-        cursor: auto;
+      hr {
+        border-color: rgb(51, 51, 51);
+        background-color: rgb(51, 51, 51);
+        border-style:solid;
+        width: 8%;
+        margin: var(--hr-margin, 2px) auto;
       }
 
-      hr {
-        color: darkgrey;
-        width: 20%;
+      .small {
+        width: 4%;
+      }
+
+      .smallest {
+        width: 1%;
       }
 
       p {
@@ -51,9 +57,15 @@ class IncrementSteper extends PolymerElement {
       <skeleton-carousel direction="vertical" selected="{{selectedIndex}}" loop="">
         <template is="dom-repeat" items="[[values]]">
           <div class="item-container">
+            <hr class="smallest">
+          
+            <hr class="small">
             <hr>
             <p>[[item]]</p>
             <hr>
+            <hr class="small">     
+            <hr class="smallest">
+       
           </div>
         </template>
       </skeleton-carousel>

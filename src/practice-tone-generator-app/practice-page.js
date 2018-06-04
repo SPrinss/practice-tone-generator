@@ -100,15 +100,31 @@ class PracticePage extends PolymerElement {
       }
 
       #time-signature-overlay-content {
-        align-self: center;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: linear-gradient(
+          to top
+          , rgba(51, 51, 51, .5) 0%
+          , rgba(51, 51, 51, .5) 48%
+          , rgba(255, 0, 0, .5) 48%
+          , rgba(255, 0, 0, .5) 53%
+          , rgba(51, 51, 51, .5) 53%
+          , rgba(51, 51, 51, .5) 100% 
+        );
       }
 
       increment-stepper {
         display: inline-block;
-        width: 60px;
+        width: 100%;
         height: 120px;
+        margin: 16px 0;
         @apply --ptg-font-body-base;
+        --hr-margin: 2px;
       }
+
       
       paper-slider {
         width: 100%;
@@ -261,7 +277,13 @@ class PracticePage extends PolymerElement {
         #time-signure-button {
           min-width: 5.14em;
           height: 58px;
-        }        
+        }      
+        
+        increment-stepper {
+          --hr-margin: 5px;
+          margin: 46px 0;
+
+        }
       }
 
       paper-icon-button {
@@ -351,8 +373,8 @@ class PracticePage extends PolymerElement {
 
       <div id="time-signature-overlay" data-show-overlay\$="[[showOverlay]]">
         <div id="time-signature-overlay-content">
-          <increment-stepper values="[[beats]]" selected-index="{{beatIndex}}" selected-value="{{beat}}"></increment-stepper>
-          <increment-stepper values="[[measures]]" selected-index="{{measureIndex}}" selected-value="{{measure}}"></increment-stepper>
+          <increment-stepper id="beat-stepper" values="[[beats]]" selected-index="{{beatIndex}}" selected-value="{{beat}}"></increment-stepper>
+          <increment-stepper id="measure-stepper" values="[[measures]]" selected-index="{{measureIndex}}" selected-value="{{measure}}"></increment-stepper>
         </div>
       </div>
 
