@@ -1,4 +1,4 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import {PwaStatus} from './pwa-status.js';
 import '@polymer/paper-slider/paper-slider.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-item/paper-item.js';
@@ -8,6 +8,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
 
 import './ptg-icons.js';
+
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 /**
  * `settings-page` Description
@@ -17,7 +18,7 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
  * @polymer
  * @extends {Polymer.Element}
  */
-class SettingsPage extends PolymerElement {
+class SettingsPage extends PwaStatus {
   static get template() {
     return html`
     <style>
@@ -151,6 +152,10 @@ class SettingsPage extends PolymerElement {
       paper-button[disabled] {
         color: grey;
       }
+
+      [hidden] {
+        display: none;
+      }
     </style>
 
     <main>
@@ -168,29 +173,26 @@ class SettingsPage extends PolymerElement {
           <h1>Keys</h1>
 
           <paper-button 
-            icon="ptg-icons:flat-square"
             data-raised$="{{flatsActive}}"
             raised="{{flatsActive}}"
             disabled="[[_computeButtonDisabled(whitesActive, sharpsActive, flatsActive, 'flatsActive')]]"
             on-click="_toggleActive"
             data-prop-name="flatsActive"
           >
-            Flats ♭
+            Flat keys ♭
           </paper-button>
 
           <paper-button 
-            icon="ptg-icons:sharp-square"
             data-raised$="{{sharpsActive}}"
             raised="{{sharpsActive}}"
             disabled="[[_computeButtonDisabled(whitesActive, sharpsActive, flatsActive, 'sharpsActive')]]"
             on-click="_toggleActive"    
             data-prop-name="sharpsActive"
           >
-            Sharps ♯
+            Sharp keys ♯
           </paper-button>
           
           <paper-button 
-            icon="ptg-icons:sharp-square"
             data-raised$="{{whitesActive}}"
             raised="{{whitesActive}}"
             disabled="[[_computeButtonDisabled(whitesActive, sharpsActive, flatsActive, 'whitesActive')]]"
@@ -216,6 +218,18 @@ class SettingsPage extends PolymerElement {
             <paper-slider pin="" min="0" max="100" value="{{metronomeVolume}}"></paper-slider>
           </div>
         </section>
+
+
+        <section>
+          <h1>Preferrences</h1>
+          <paper-button
+            hidden$="[[!_atLeastOneIsTrue(isPwa, canInstallPwa)]]"
+            on-click="_handleInstallPwa"
+            raised
+          >
+            Add to homescreen
+          </paper-button>
+        </section>        
       </div>
     </main>
 `;
@@ -278,9 +292,14 @@ class SettingsPage extends PolymerElement {
         type: Boolean,
         value: false,
         notify: true
-      }      
+      },
+      _iOsPwaPromptOverlayVisible: {
+        type: Boolean,
+        value: false
+      }
     };
   }
+
 
   ready() {
     super.ready()
@@ -295,6 +314,15 @@ class SettingsPage extends PolymerElement {
     this.dispatchEvent(new CustomEvent('switch-page-intend'));
   }
 
+  _handleInstallPwa() {
+    if(this.canInstallPwaUsingPrompt) return this.installPwaWithPrompt();
+    this._displayInstallPwaPrompt();
+  }
+
+  _displayInstallPwaPrompt() {
+    // TODO this.userBrowser -> show custom notification
+  }
+
   _toggleActive(evt) {
     var propName = evt.target.getAttribute('data-prop-name');
     this.set(propName, !this[propName])
@@ -304,6 +332,11 @@ class SettingsPage extends PolymerElement {
     var buttonsActive = [whitesActive, sharpsActive, flatsActive].filter(v => v).length;
     if(buttonsActive <= 1 && this[buttonToneType] == true) return true;
     return false;
+  }
+
+  _atLeastOneIsTrue() {
+    var argumentsArray = [].slice.apply(arguments);
+    return argumentsArray.includes(true);
   }
 }
 
