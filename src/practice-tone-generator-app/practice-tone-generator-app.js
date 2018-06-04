@@ -65,6 +65,9 @@ class PracticeToneGeneratorApp extends PtgElement {
         no-succedent-identical-notes="{{noSuccedentIdenticalNotes}}" 
         bars-before-switch="{{barsBeforeSwitch}}" 
         on-switch-page-intend="_switchPage"
+        fullscreen="{{fullscreen}}"
+        on-enter-fullscreen-attempt="_handleEnterFullscreenAttempt"
+        on-exit-fullscreen-attempt="_handleExitFullscreenAttempt"
         ></settings-page>
     </iron-pages>
 `;
