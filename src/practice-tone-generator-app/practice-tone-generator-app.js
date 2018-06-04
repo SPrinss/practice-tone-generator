@@ -76,13 +76,59 @@ class PracticeToneGeneratorApp extends PtgElement {
       selectedPage: {
         type: Number,
         value: 0
+      },
+      fullscreen: {
+        type: Boolean,
+        value: false
       }
     };
+  }
+
+  ready() {
+    super.ready()
+    this._addFullscreenEventListeners()
+  }
+
+  _addFullscreenEventListeners() {
+    this.addEventListener("fullscreenchange", function () {     
+      this.set('fullscreen', this._isFullScreen())
+    }.bind(this), false);
+    
+    this.addEventListener("mozfullscreenchange", function () {     
+      this.set('fullscreen', this._isFullScreen())
+    }.bind(this), false);
+    
+    this.addEventListener("webkitfullscreenchange", function () {
+      this.set('fullscreen', this._isFullScreen())
+    }.bind(this), false);
+    
+    this.addEventListener("msfullscreenchange", function () {     
+      this.set('fullscreen', this._isFullScreen())
+    }.bind(this), false);
+  }
+
+  _isFullScreen() {
+    var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+    (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+    (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+    (document.msFullscreenElement && document.msFullscreenElement !== null);
+    if(typeof isInFullScreen == "undefined" || isInFullScreen == null) isInFullScreen = false;
+    return isInFullScreen;
   }
 
   _switchPage() {
     if(this.selectedPage == 0) return this.set('selectedPage', 1)
     this.set('selectedPage', 0);
+  }
+
+  _handleEnterFullscreenAttempt() {
+    var requestFullscreen = (this.requestFullscreen || this.webkitRequestFullscreen || this.mozRequestFullscreen || this.msRequestFullscreen);
+    requestFullscreen.call(this);
+  }
+
+  _handleExitFullscreenAttempt() {
+    var exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+    exitFullscreen.call(document);
   }
 }
 

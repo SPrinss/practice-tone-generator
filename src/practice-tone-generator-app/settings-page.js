@@ -229,6 +229,23 @@ class SettingsPage extends PwaStatus {
           >
             Add to homescreen
           </paper-button>
+
+          <paper-button
+            hidden$="[[_showEnterFullscreenButton(_fullscreenAvailable, fullscreen)]]"
+            on-click="toggleFullscreen"
+            data-raised$="[[!_showEnterFullscreenButton(_fullscreenAvailable, fullscreen)]]"
+            raised
+          >
+            Enter Fullscreen
+          </paper-button>            
+          <paper-button
+            hidden$="[[!_showEnterFullscreenButton(_fullscreenAvailable, fullscreen)]]"
+            on-click="toggleFullscreen"
+            raised
+            data-raised$="[[_showEnterFullscreenButton(_fullscreenAvailable, fullscreen)]]"
+          >
+            Exit Fullscreen
+          </paper-button>                              
         </section>        
       </div>
     </main>
@@ -293,9 +310,20 @@ class SettingsPage extends PwaStatus {
         value: false,
         notify: true
       },
+      fullscreen: {
+        type: Boolean,
+        value: false
+      },
       _iOsPwaPromptOverlayVisible: {
         type: Boolean,
         value: false
+      },
+      _fullscreenAvailable: {
+        type: Boolean,
+        value: function() {
+          var available = !!(this.requestFullscreen || this.webkitRequestFullscreen || this.mozRequestFullscreen || this.msRequestFullscreen);
+          return available;
+        }
       }
     };
   }
@@ -337,6 +365,23 @@ class SettingsPage extends PwaStatus {
   _atLeastOneIsTrue() {
     var argumentsArray = [].slice.apply(arguments);
     return argumentsArray.includes(true);
+  }
+
+  toggleFullscreen() {
+    var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+    (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+    (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+    (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+    if (!isInFullScreen) {
+      this.dispatchEvent(new CustomEvent('enter-fullscreen-attempt'))
+    } else {
+      this.dispatchEvent(new CustomEvent('exit-fullscreen-attempt'))
+    }
+  }
+
+  _showEnterFullscreenButton(fullscreenPossible, isInFullscreen) {
+    return fullscreenPossible == true && isInFullscreen == true;
   }
 }
 
