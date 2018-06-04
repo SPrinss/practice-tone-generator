@@ -25,8 +25,8 @@ class IncrementSteper extends PolymerElement {
       }
 
       hr {
-        border-color: rgb(51, 51, 51);
-        background-color: rgb(51, 51, 51);
+        border-color: var(--hr-color, rgba(51, 51, 51, .5));
+        background-color: var(--hr-color, rgba(51, 51, 51, .5));
         border-style:solid;
         width: 8%;
         margin: var(--hr-margin, 2px) auto;

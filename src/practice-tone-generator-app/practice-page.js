@@ -111,6 +111,7 @@ class PracticePage extends PolymerElement {
         width: 100%;
         height: 120px;        
         --hr-margin: 5px;
+        --hr-color: var(--background-color-bright, rgba(51, 51, 51, 1));
         margin: 46px 0;
       }
       
