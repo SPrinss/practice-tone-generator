@@ -118,6 +118,7 @@ class PracticeToneGeneratorApp extends PtgElement {
     (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
     (document.msFullscreenElement && document.msFullscreenElement !== null);
     if(typeof isInFullScreen == "undefined" || isInFullScreen == null) isInFullScreen = false;
+
     return isInFullScreen;
   }
 

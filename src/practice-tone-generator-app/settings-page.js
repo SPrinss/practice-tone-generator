@@ -272,6 +272,7 @@ class SettingsPage extends PwaStatus {
           <paper-button
             on-click="_sendFeedback"
             disabled="[[!feedback]]"
+            raised
           >
             Send
           </paper-button>   
