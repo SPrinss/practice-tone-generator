@@ -141,9 +141,10 @@ class PracticePage extends PolymerElement {
       }
 
       #time-signure-button {
-        background-color: var(--background-color-bright, rgb(51, 51, 51));
+        background-color: transparent;
         min-width: 5.14em;
         height: 58px;
+        color: var(--text-color, white);
       }      
 
       toggle-icon {
@@ -275,8 +276,7 @@ class PracticePage extends PolymerElement {
 
       <paper-button 
         class="absolute first-top first-left ptg-button"
-        id="time-signure-button" 
-        toggles 
+        id="time-signure-button"  
         raised 
         on-click="toggleOverlayVisibility"
       >
