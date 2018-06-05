@@ -30,6 +30,8 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
 
       * {
         box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
         color: white;
       }
 

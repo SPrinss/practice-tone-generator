@@ -5,7 +5,7 @@ import '@polymer/paper-slider/paper-slider.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-checkbox/paper-checkbox.js';
-
+import './ptg-image.js';
 import './ptg-icons.js';
 
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
@@ -134,6 +134,43 @@ class SettingsPage extends PwaStatus {
         }
       }
 
+      #email-img {
+        height: 20px;
+        margin-top: 4px;
+      }
+
+      textarea {
+        resize: none;
+        height: 100px;
+        overflow: auto;
+      }
+
+      input, textarea {
+        @apply --ptg-font-body;
+        font-size: 11px;
+        outline: none;
+        border: none;
+        display: block;
+        margin: 4px 0;
+        width: 100%;
+        max-width: 300px;
+        border-radius: 4px;
+        padding: 7px;
+        background-color: #e8eeef;
+        width: 100%;
+        color: black;
+        -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+        box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+      }
+
+      input:placeholder, textarea:placeholder, input::-webkit-input-placeholder, textarea::-webkit-input-placeholder, input::-moz-placeholder, textarea::-moz-placeholder, input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+        color:#8a97a0;
+      }
+
+      input {
+        margin-top: 8px;
+      }
+
       [hidden] {
         display: none;
       }
@@ -199,7 +236,7 @@ class SettingsPage extends PwaStatus {
 
 
         <section>
-          <h1>Preferrences</h1>
+          <h1>Preferences</h1>
           <paper-button
             hidden$="[[!_atLeastOneIsTrue(isPwa, canInstallPwa)]]"
             on-click="_handleInstallPwa"
@@ -224,7 +261,23 @@ class SettingsPage extends PwaStatus {
           >
             Exit Fullscreen
           </paper-button>                              
-        </section>        
+        </section> 
+        
+        <section>
+          <h1>About</h1>
+          <p>Made with <a href="https://tonejs.github.io/" target="_blank">ToneJS</a>, <a href="https://www.polymer-project.org/" target="_blank">Polymer 3.0</a> and <a href="https://firebase.google.com/docs/hosting/" target="_blank">Firebase hosting</a>.</p>
+
+          <input type="text" placeholder="Email (optional)" value="{{email::change}}">
+          <textarea placeholder="Provide feedback, report a bug, request a feature... or show some love." maxlength="700"  value="{{feedback::input}}"></textarea>
+          <paper-button
+            on-click="_sendFeedback"
+            disabled="[[!feedback]]"
+          >
+            Send
+          </paper-button>   
+          <span hidden$="[[!_thanksMessageVisible]]">Thanks a lot!</span>
+          <img id="email-img" src="../../images/email.svg" id="email" alt="contact-email">
+        </section>         
       </div>
     </main>
 `;
@@ -292,6 +345,15 @@ class SettingsPage extends PwaStatus {
         type: Boolean,
         value: false
       },
+      email: {
+        type: String,
+        value: ""
+      },
+      feedback: {
+        type: String,
+        value: "",
+        observer: "_loadDatabase"
+      },
       _iOsPwaPromptOverlayVisible: {
         type: Boolean,
         value: false
@@ -302,6 +364,14 @@ class SettingsPage extends PwaStatus {
           var available = !!(this.requestFullscreen || this.webkitRequestFullscreen || this.mozRequestFullscreen || this.msRequestFullscreen);
           return available;
         }
+      },
+      _thanksMessageVisible: {
+        type: Boolean,
+        value: false
+      },
+      _loadingDatabaseScripts: {
+        type: Boolean,
+        value: false
       }
     };
   }
@@ -360,6 +430,57 @@ class SettingsPage extends PwaStatus {
 
   _showEnterFullscreenButton(fullscreenPossible, isInFullscreen) {
     return fullscreenPossible == true && isInFullscreen == true;
+  }
+
+  _loadScript(url, callback){
+    // Adding the script tag to the head as suggested before
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+
+    // Then bind the event to the callback function.
+    // There are several events for cross browser compatibility.
+    script.onreadystatechange = callback;
+    script.onload = callback;
+
+    // Fire the loading
+    head.appendChild(script);
+  }
+
+  _loadDatabase(feedback) {
+    if(!feedback || feedback == "" || this._loadingDatabaseScripts) return;
+
+    this.set('_loadingDatabaseScripts', true)
+
+    this._loadScript("https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js", this._handleDatabaseScriptLoaded)
+    this._loadScript("https://www.gstatic.com/firebasejs/5.0.4/firebase-firestore.js")
+  }
+  
+  _handleDatabaseScriptLoaded() {
+    var config = {
+      apiKey: "AIzaSyC0JcpiON9yP-UYQehou-YYRU5Re66Att0",
+      authDomain: "practice-tone-generator.firebaseapp.com",
+      databaseURL: "https://practice-tone-generator.firebaseio.com",
+      projectId: "practice-tone-generator",
+      storageBucket: "practice-tone-generator.appspot.com",
+      messagingSenderId: "94272529138"
+    };
+    firebase.initializeApp(config);
+  }
+
+  _sendFeedback() {
+    var email = this.email; var feedback = this.feedback;
+    var date = new Date();
+    var dateInMs = date.getTime()
+
+    firebase.firestore().collection('feedback').add({
+      email: email, feedback: feedback, timestamp: dateInMs
+    }).then((function() {
+        this.set('email', ""); this.set('feedback', ""); this.set('_thanksMessageVisible', true)
+    }).bind(this)).catch((function(error) {
+      console.warn('Adding feedback failed...' + error)}).bind(this)
+    );
   }
 }
 
