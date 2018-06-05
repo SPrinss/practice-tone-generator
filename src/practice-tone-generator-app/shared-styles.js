@@ -82,6 +82,10 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
       .image {
         padding: 0;
         margin: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none; 
       }
 
       .center {
