@@ -6,7 +6,7 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
     <style>
       :host {
         --main-vertical-padding: 5vh;
-        --max-width: 600px;
+        --max-width: 660px;
         --bar-height: 40px;
         --tone-size: 90px;
         --next-tone-width: 23px;
