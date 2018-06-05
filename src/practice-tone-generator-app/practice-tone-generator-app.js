@@ -95,19 +95,19 @@ class PracticeToneGeneratorApp extends PtgElement {
   }
 
   _addFullscreenEventListeners() {
-    this.addEventListener("fullscreenchange", function () {     
+    document.addEventListener("fullscreenchange", function () {     
       this.set('fullscreen', this._isFullScreen())
     }.bind(this), false);
     
-    this.addEventListener("mozfullscreenchange", function () {     
+    document.addEventListener("mozfullscreenchange", function () {     
       this.set('fullscreen', this._isFullScreen())
     }.bind(this), false);
     
-    this.addEventListener("webkitfullscreenchange", function () {
+    document.addEventListener("webkitfullscreenchange", function () {
       this.set('fullscreen', this._isFullScreen())
     }.bind(this), false);
     
-    this.addEventListener("msfullscreenchange", function () {     
+    document.addEventListener("msfullscreenchange", function () {     
       this.set('fullscreen', this._isFullScreen())
     }.bind(this), false);
   }
