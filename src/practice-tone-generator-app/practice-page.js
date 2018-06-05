@@ -204,7 +204,7 @@ class PracticePage extends PolymerElement {
         right: 0;
         top: calc(50% - calc(var(--bar-height) * 1.5));
         height: calc(calc(var(--bar-height)*1.5)/2);
-        width: 80px;        
+        width: 58px;        
       }      
 
       @media screen and (max-device-width: 840px) {
