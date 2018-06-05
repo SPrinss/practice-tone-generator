@@ -85,7 +85,8 @@ export class PtgElement extends PolymerElement {
       },
       noSuccedentIdenticalNotes: {
         type: Boolean,
-        value: false
+        value: true,
+        notify: true
       },       
       _player: {
         type: Object,

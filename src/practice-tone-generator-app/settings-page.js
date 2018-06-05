@@ -280,7 +280,7 @@ class SettingsPage extends PwaStatus {
       },
       noSuccedentIdenticalNotes: {
         type: Boolean,
-        value: false,
+        value: true,
         notify: true
       },
       userInteracted: {
