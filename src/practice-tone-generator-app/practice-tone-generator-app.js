@@ -127,13 +127,13 @@ class PracticeToneGeneratorApp extends PtgElement {
   }
 
   _handleEnterFullscreenAttempt() {
-    var requestFullscreen = (this.requestFullscreen || this.webkitRequestFullscreen || this.mozRequestFullscreen || this.msRequestFullscreen);
-    requestFullscreen.call(this);
+    var reqFullscreenBrowserCompatible = (this.requestFullscreen || this.webkitRequestFullscreen || this.mozRequestFullscreen || this.mozRequestFullScreen || this.msRequestFullscreen);
+    reqFullscreenBrowserCompatible.call(this);
   }
 
   _handleExitFullscreenAttempt() {
-    var exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
-    exitFullscreen.call(document);
+    var exitFullscreenBrowserCompatible = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+    exitFullscreenBrowserCompatible.call(document);
   }
 }
 

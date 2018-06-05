@@ -361,7 +361,7 @@ class SettingsPage extends PwaStatus {
       _fullscreenAvailable: {
         type: Boolean,
         value: function() {
-          var available = !!(this.requestFullscreen || this.webkitRequestFullscreen || this.mozRequestFullscreen || this.msRequestFullscreen);
+          var available = !!(this.requestFullscreen || this.webkitRequestFullscreen || this.mozRequestFullscreen || this.mozRequestFullScreen || this.msRequestFullscreen);
           return available;
         }
       },
