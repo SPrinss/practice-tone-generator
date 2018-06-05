@@ -83,7 +83,7 @@ class PracticePage extends PolymerElement {
         }
         #next-tone {
           width: calc(var(--next-tone-width) / 1.5);
-          height: calc(calc(var(--bar-height)-4px));   
+          height: calc(calc(var(--bar-height) - 4px));   
           top: calc(50% - var(--next-tone-width));
         }
       }
@@ -95,7 +95,7 @@ class PracticePage extends PolymerElement {
         }
         #next-tone {
           width: calc(var(--next-tone-width) / 1.5);
-          height: calc(calc(var(--bar-height)-4px) / 1.5);   
+          height: calc(calc(var(--bar-height) - 4px) / 1.5);   
           top: 48%;
         }   
       }
