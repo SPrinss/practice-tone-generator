@@ -276,7 +276,7 @@ class SettingsPage extends PwaStatus {
             Send
           </paper-button>   
           <span hidden$="[[!_thanksMessageVisible]]">Thanks a lot!</span>
-          <img id="email-img" src="../../images/email.svg" id="email" alt="contact-email">
+          <ptg-image class="image" id="email-img" source="../../images/email.svg"></ptg-image>
         </section>         
       </div>
     </main>
