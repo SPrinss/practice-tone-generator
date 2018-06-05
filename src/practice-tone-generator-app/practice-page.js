@@ -55,9 +55,11 @@ class PracticePage extends PolymerElement {
 
       /* IMAGES */
       #circle  {
-        width: 128%;
-        height: 128%;
+        width: 60%;
+        height: 60%;
+        max-height: 44vh;
         z-index: 1;
+        pointer-events: none;
       }
 
       #current-tone {
@@ -97,13 +99,6 @@ class PracticePage extends PolymerElement {
           top: 48%;
         }   
       }
-
-      @media screen and (max-device-height: 800px) {
-        #circle  {
-          width: 128%;
-          height: 100%;
-        }
-      }      
 
       /* USER INPUT ELEMENTS */
       increment-stepper {
@@ -334,7 +329,7 @@ class PracticePage extends PolymerElement {
       </div>
 
       <section class="relative">
-        <img class="center" src="../../images/circle.svg" id="circle" alt="">
+        <ptg-image class="image center" id="circle" source="../../images/circle.svg"></ptg-image>        
         <ptg-image class="image center" id="current-tone" hidden$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
         <ptg-image class="image absolute" id="next-tone" hidden$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
         <ptg-image class="image absolute" id="next-text" hidden$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
