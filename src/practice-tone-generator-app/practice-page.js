@@ -55,8 +55,8 @@ class PracticePage extends PolymerElement {
 
       /* IMAGES */
       #circle  {
-        width: 60%;
-        height: 60%;
+        width: 67%;
+        height: 67%;
         max-height: 44vh;
         z-index: 1;
         pointer-events: none;
@@ -133,6 +133,7 @@ class PracticePage extends PolymerElement {
         background-color: var(--background-color-bright, rgb(51, 51, 51));
         width: 60px;
         height: 40px;
+        margin-left: calc(var(--first-horizontal-positioned-item-position, 8%) / 2);
         text-align:center;
       }
 

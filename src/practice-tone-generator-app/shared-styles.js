@@ -23,9 +23,9 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         --text-color: #FFFFFF;
         --border-color: darkgrey;
         --first-horizontal-positioned-item-position: 8%;
-        --second-horizontal-positioned-item-position: 22%;
-        --first-vertical-positioned-item-position: 10%;
-        --second-vertical-positioned-item-position: 23%;
+        --second-horizontal-positioned-item-position: 20%;
+        --first-vertical-positioned-item-position: 8%;
+        --second-vertical-positioned-item-position: 20%;
       }
 
       * {
