@@ -1,0 +1,18 @@
+{
+  "email_transport": {
+    "service": "Gmail",
+    "auth": {
+      "user": "config.email",
+      "pass": "config.password"
+    }
+  },
+  "email_from": "migrantBookBot@gmail.com",
+  "email_to": "samprinssen@gmail.com",
+  "review_email_subject": "Nieuwe review over The Migrant book van: ",
+  "request_email_subject": "Nieuwe aanvraag voor The Migrant book van: ",
+  "review_email_message_intro": "Hallo Anaïs,<br>er heeft iemand een review achtergelaten op de Migrant site:",
+  "request_email_message_intro": "Hallo Anaïs,<br>er heeft iemand een nieuwe aanvraag achtergelaten op de Migrant site:",
+  "email_message_signature": "<br><br>Ok doei!<br>De magische bot",
+  "book_review_ref_trigger": "/migrant-book-reviews/{bookReviewId}",
+  "book_request_ref_trigger": "/migrant-book-requests/{bookRequestId}"
+}

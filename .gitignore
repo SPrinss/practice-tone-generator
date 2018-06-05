@@ -4,3 +4,6 @@ node_modules
 .DS_store
 yarn-error.log
 build/**
+functions/config.json
+functions/package-lock.json
+functions/.eslintrc.json
