@@ -55,8 +55,8 @@ class PracticePage extends PolymerElement {
 
       /* IMAGES */
       #circle  {
-        height: 80%;
-        max-height: calc(var(--max-width) - 60px);
+        width: 128%;
+        height: 128%;
         z-index: 1;
       }
 
@@ -75,9 +75,6 @@ class PracticePage extends PolymerElement {
       }
 
       @media screen and (max-device-width: 840px) and (orientation: landscape) {
-        #circle  {
-          height: 70vh 
-        }
         #current-tone {
           height: calc(var(--tone-size) / 1.5);
           width: calc(var(--tone-size) / 1.5);
@@ -90,9 +87,6 @@ class PracticePage extends PolymerElement {
       }
 
       @media screen and (max-device-width: 840px) and (orientation: portrait) {
-        #circle  {
-          height: 40%; 
-        }
         #current-tone {
           height: calc(var(--tone-size) / 1.5);
           width: calc(var(--tone-size) / 1.5);
@@ -103,6 +97,13 @@ class PracticePage extends PolymerElement {
           top: 48%;
         }   
       }
+
+      @media screen and (max-device-height: 800px) {
+        #circle  {
+          width: 128%;
+          height: 100%;
+        }
+      }      
 
       /* USER INPUT ELEMENTS */
       increment-stepper {
@@ -333,7 +334,7 @@ class PracticePage extends PolymerElement {
       </div>
 
       <section class="relative">
-        <img class="image center" src="../../images/circle.svg" id="circle" alt="">
+        <img class="center" src="../../images/circle.svg" id="circle" alt="">
         <ptg-image class="image center" id="current-tone" hidden$="[[!tone]]" source="[[_computeImgPath(tone)]]"></ptg-image>
         <ptg-image class="image absolute" id="next-tone" hidden$="[[!nextTone]]" source="[[_computeImgPath(nextTone)]]"></ptg-image>
         <ptg-image class="image absolute" id="next-text" hidden$="[[!nextTone]]" source="../../images/next.svg"></ptg-image>
