@@ -5,7 +5,7 @@ var emailClient = require('./emailClient');
 
 admin.initializeApp(functions.config().firebase);
 
-exports.mailFeedback = functions.firestore.document('feedback/{feedbackId}').onWrite((event) => {
-  var userFormData = event.data.data();
+exports.mailFeedback = functions.firestore.document('feedback/{feedbackId}').onCreate((snap) => {
+  var userFormData = snap.data();
   return emailClient.sendReviewEmail(config, userFormData.email, userFormData.feedback);
 })
