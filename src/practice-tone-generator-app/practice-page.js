@@ -154,6 +154,13 @@ class PracticePage extends PolymerElement {
         }
       }
 
+      #play-pause-button {
+        --toggle-icon-buttons: {
+          width: 72px;
+          height: 72px;
+        }
+      }
+
       @media screen and (max-device-width: 840px) {
         increment-stepper {
           margin: 16px 0;
@@ -166,6 +173,13 @@ class PracticePage extends PolymerElement {
             height: 44px;
           }
         }
+
+        #play-pause-button {
+          --toggle-icon-buttons: {
+            width: 66px;
+            height: 66px;
+          }
+        }        
 
         #time-signure-button {
           min-width: 23px;
@@ -269,7 +283,8 @@ class PracticePage extends PolymerElement {
       <toggle-icon 
         class="absolute second-top second-left ptg-button"
         icon="ptg-icons:play-arrow" 
-        icon-checked="ptg-icons:pause" 
+        icon-checked="ptg-icons:pause"
+        id="play-pause-button"
         alt="repeat-button"
         on-click="_toggleRunGenerator"
       ></toggle-icon>
