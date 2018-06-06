@@ -33,6 +33,10 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         color: white;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none; 
       }
 
       p, span {
@@ -82,10 +86,6 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
       .image {
         padding: 0;
         margin: 0;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none; 
       }
 
       .center {

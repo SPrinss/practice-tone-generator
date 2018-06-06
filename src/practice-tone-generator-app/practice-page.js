@@ -271,12 +271,8 @@ class PracticePage extends PolymerElement {
         cursor: pointer;
       }
 
-      #time-signatur-close-bar span {
+      #close-text {
         pointer-events: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
       }
 
       [hidden] {
@@ -330,7 +326,7 @@ class PracticePage extends PolymerElement {
       ></paper-icon-button>
 
       <div id="time-signature-overlay" data-show-overlay\$="[[showOverlay]]">
-        <div id="time-signatur-close-bar" on-click="toggleOverlayVisibility"> <span>Close</span> </div>
+        <div id="time-signatur-close-bar" on-click="toggleOverlayVisibility"> <span id="close-text">Close</span> </div>
         <div id="time-signature-overlay-content">
           <increment-stepper id="beat-stepper" values="[[beats]]" selected-index="{{beatIndex}}" selected-value="{{beat}}"></increment-stepper>
           <increment-stepper id="measure-stepper" values="[[measures]]" selected-index="{{measureIndex}}" selected-value="{{measure}}"></increment-stepper>
